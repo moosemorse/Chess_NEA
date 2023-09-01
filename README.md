@@ -1,2 +1,2 @@
 # Chess_NEA
-(NEA) Project for school - chess application + chess AI 
+A chess application that users can play against a chess AI. After playing, users can save games for later review. 
