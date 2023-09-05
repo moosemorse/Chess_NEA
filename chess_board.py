@@ -12,6 +12,12 @@ fps = 60
 
 #importing piece assets 
 
+black_pieces = ["b_queen", "b_queen", "b_king", "b_king", "b_bishop", "b_bishop", 
+              "b_knight", "b_pawn", "b_rook"]
+
+white_pieces = ["w_queen", "w_queen", "w_king", "w_king", "w_bishop", "w_bishop", 
+              "w_knight", "w_pawn", "w_rook"]
+
 #name of piece accompanied by colour 
 #black queen 
 b_queen = pygame.image.load('assets/piece/b_queen')
