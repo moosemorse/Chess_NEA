@@ -11,63 +11,26 @@ timer = pygame.time.Clock()
 fps = 60 
 
 #importing piece assets 
+#back_rank of whites/blacks pieces and pawns repeat 8 times in the next row 
+back_rank = ['rook', 'knight', 'bishop', 'queen', 'king', 'bishop', 'knight', 'rook']
 
-black_pieces = ["b_queen", "b_queen", "b_king", "b_king", "b_bishop", "b_bishop", 
-              "b_knight", "b_pawn", "b_rook"]
-
-white_pieces = ["w_queen", "w_queen", "w_king", "w_king", "w_bishop", "w_bishop", 
-              "w_knight", "w_pawn", "w_rook"]
-
-#name of piece accompanied by colour 
-#black queen 
-b_queen = pygame.image.load('assets/piece/b_queen')
-b_queen = pygame.transform.scale(b_queen, (80, 80))
-#smaller image for when piece is taken 
-b_queen_small = pygame.transform.scale(b_queen, (45, 45))
-#black king 
-b_king = pygame.image.load('assets/piece/b_king')
-b_king = pygame.transform.scale(b_king, (80,80))
-b_king_small = pygame.transform.scale(b_king, (45,45))
-#black bishop 
-b_bishop = pygame.image.load('assets/piece/b_bishop')
-b_bishop = pygame.transform.scale(b_bishop, (80, 80))
-b_bishop_small = pygame.transform.scale(b_bishop, (45, 45))
-#black knight 
-b_knight = pygame.image.load('assets/piece/b_knight')
-b_knight = pygame.transform.scale(b_knight, (80, 80))
-b_knight_small = pygame.transform.scale(b_knight, (45, 45))
-#black pawn 
-b_pawn = pygame.image.load('assets/piece/b_pawn')
-b_pawn = pygame.transform.scale(b_pawn, (80, 80))
-b_pawn_small = pygame.transform.scale(b_pawn, (45, 45))
-#black rook 
-b_rook = pygame.image.load('assets/piece/b_rook')
-b_rook = pygame.transform.scale(b_rook, (80, 80))
-b_rook_small = pygame.transform.scale(b_rook, (45, 45))
-#white bishop 
-w_bishop = pygame.image.load('assets/piece/w_bishop')
-w_bishop = pygame.transform.scale(w_bishop, (80, 80))
-w_bishop_small = pygame.transform.scale(w_bishop, (45, 45))
-#white knight 
-w_knight = pygame.image.load('assets/piece/w_knight')
-w_knight = pygame.transform.scale(w_knight, (80, 80))
-w_knight_small = pygame.transform.scale(w_knight, (45, 45))
-#white pawn 
-w_pawn = pygame.image.load('assets/piece/w_pawn')
-w_pawn = pygame.transform.scale(w_pawn, (80, 80))
-w_pawn_small = pygame.transform.scale(w_pawn, (45, 45))
-#white rook 
-w_rook = pygame.image.load('assets/piece/w_rook')
-w_rook = pygame.transform.scale(w_rook, (80, 80))
-w_rook_small = pygame.transform.scale(w_rook, (45, 45))
-#white queen 
-w_queen = pygame.image.load('assets/piece/w_queen')
-w_queen = pygame.transform.scale(w_queen, (80,80))
-w_queen_small = pygame.transform.scale(w_queen, (45,45))
-#white king 
-w_king = pygame.image.load('assets/piece/w_king')
-w_king = pygame.transform.scale(w_king, (80,80))
-w_king_small = pygame.transform.scale(w_king, (45,45))
+#takes in pieces (which actually can be a local variable) 
+#chessboard determines colour of board 
+#surface is where objects are drawn onto 
+def draw_board(pieces,chessboard, surface): 
+    for i in range(0,8): 
+        if i%2 == 0: 
+            square = pygame.image.load(f'assets/chessboard/square_d{chessboard}.png') 
+            square = pygame.transform.scale(square, (100,100))
+            surface.blit(square, (i*100, 0))
+        else: 
+            square = pygame.image.load(f'assets/chessboard/square_l{chessboard}.png')
+            square = pygame.transform.scale(square, (100,100))
+            surface.blit(square, (i*100, 0)) 
+        piece = pygame.image.load(f'assets/piece/b_{pieces[i]}.png')
+        piece = pygame.transform.scale(piece, (80,80))
+        surface.blit(piece, ((i*100)+10, 0))
+    pass 
 
 #main game loop 
 run = True 
@@ -80,8 +43,8 @@ while run:
     for event in pygame.event.get(): 
         if event.type == pygame.QUIT: 
             run = False
-    
 
+    draw_board(back_rank, 'g', screen)
 
     pygame.display.flip() 
 
