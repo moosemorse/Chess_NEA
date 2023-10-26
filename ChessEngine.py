@@ -173,10 +173,25 @@ class GameState():
                     break 
 
     def getQueenMoves(self, row, col, moves): 
-        pass 
+        # Queen moves like a rook and bishop combined 
+        self.getRookMoves(row, col, moves)
+        self.getBishopMoves(row, col, moves) 
 
     def getKingMoves(self, row, col, moves): 
-        pass 
+        directions = ((-1,-1), (-1,0), (-1,1), (0,-1), (0,1), (1,-1), (1,0), (1,1)) 
+        # Check each tuple within directions 
+        for d in directions: 
+            endRow = row + d[0]
+            endCol = col + d[1] 
+            # Check if on board 
+            if (0 <= endRow < 8) and (0 <= endCol < 8):
+                endPiece = self.board[endRow][endCol]  
+                # Check if empty space 
+                if endPiece == "-": 
+                    moves.append(Move((row, col), (endRow, endCol), self.board))
+                # Check if different piece, so king can capture 
+                elif endPiece.islower() ^ self.whiteToMove: 
+                        moves.append(Move((row, col), (endRow, endCol), self.board)) 
 
     # All moves considering checks 
     def getValidMoves(self): 
