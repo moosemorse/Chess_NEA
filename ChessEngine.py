@@ -9,12 +9,14 @@ class GameState():
             ["-", "-", "-", "-", "-", "-", "-", "-"],
             ["-", "-", "-", "-", "-", "-", "-", "-"],
             ["-", "-", "-", "-", "-", "-", "-", "-"],
-            ["-", "-", "-", "P", "-", "-", "-", "-"],
+            ["-", "-", "-", "-", "-", "-", "-", "-"],
             ["p", "p", "p", "p", "p", "p", "p", "p"],
             ["r", "n", "b", "q", "k", "b", "n", "r"]
         ]
         self.whiteToMove = True 
         self.moveLog = [] 
+        self.moveFunctions = {'p': self.getPawnMoves, 'r': self.getRookMoves, 'n': self.getKnightMoves, 
+                              'b': self.getBishopMoves, 'q': self.getQueenMoves, 'k': self.getKingMoves}
     
     def makeMove(self, move): 
         # Check if square is empty 
@@ -50,10 +52,8 @@ class GameState():
                 # If letter is lower-case, white piece and if it is upper-case, black piece 
                 if (piece.islower() and self.whiteToMove) or (piece.isupper() and not self.whiteToMove): 
                     piece = piece.lower() 
-                    if piece == "p": 
-                        self.getPawnMoves(row, col, moves)
-                    elif piece == "r": 
-                        self.getRookMoves(row, col, moves) 
+                    # Calls the appropiate function depending on the piece type 
+                    self.moveFunctions[piece](row, col, moves)
         return moves 
 
     def getPawnMoves(self, row, col, moves): 
@@ -92,9 +92,51 @@ class GameState():
             if col+1 <= 7: 
                 if self.board[row+1][col+1].islower(): 
                     moves.append(Move((row, col), (row+1, col+1), self.board)) 
+                
+            """ 
+            Add pawn promotion and en Passant logic after 
+            """
 
 
     def getRookMoves(self, row, col, moves): 
+        # Different directions rook can move up, left, down, right 
+        directions = ((-1,0), (0,-1), (1,0), (0,1)) 
+        # Store enemy state, white is lower-case and black otherwise 
+        for d in directions: 
+            # Check 1-7 rows and columns 
+            for i in range(1,8): 
+                # Check for each square on file and rank 
+                endRow = row + d[0]*i 
+                endCol = col + d[1]*i 
+                # Check if on board 
+                if (0 <= endRow < 8) and (0 <= endCol < 8): 
+                    endPiece = self.board[endRow][endCol] 
+                    # Rook can move to empty space 
+                    if endPiece == "-": 
+                        moves.append(Move((row, col), (endRow, endCol), self.board))
+                    # Rook can take enemy piece 
+                    elif endPiece.isupper() and self.whiteToMove: 
+                        moves.append(Move((row, col), (endRow, endCol), self.board))
+                        break 
+                    # Case for friendly case which breaks loop 
+                    else: 
+                        break 
+                # Case for off board which breaks loop 
+                else: 
+                    break 
+
+
+
+    def getKnightMoves(self, row, col, moves): 
+        pass 
+
+    def getBishopMoves(self, row, col, moves): 
+        pass 
+
+    def getQueenMoves(self, row, col, moves): 
+        pass 
+
+    def getKingMoves(self, row, col, moves): 
         pass 
 
     # All moves considering checks 
