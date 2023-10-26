@@ -101,7 +101,7 @@ class GameState():
     def getRookMoves(self, row, col, moves): 
         # Different directions rook can move up, left, down, right 
         directions = ((-1,0), (0,-1), (1,0), (0,1)) 
-        # Store enemy state, white is lower-case and black otherwise 
+        # Iterate through each direction 
         for d in directions: 
             # Check 1-7 rows and columns 
             for i in range(1,8): 
@@ -115,7 +115,7 @@ class GameState():
                     if endPiece == "-": 
                         moves.append(Move((row, col), (endRow, endCol), self.board))
                     # Rook can take enemy piece 
-                    elif endPiece.isupper() and self.whiteToMove: 
+                    elif endPiece.islower() ^ self.whiteToMove: 
                         moves.append(Move((row, col), (endRow, endCol), self.board))
                         break 
                     # Case for friendly case which breaks loop 
@@ -128,10 +128,49 @@ class GameState():
 
 
     def getKnightMoves(self, row, col, moves): 
-        pass 
+        # Knight moves in L-shapes 
+        directions = ((-2,-1), (-2,1), (-1,-2), (-1,2), (1,-2), (1,2), (2,-1), (2,1)) 
+        for d in directions: 
+            # Check for each 'L' shape away from the knight
+            endRow = row + d[0] 
+            endCol = col + d[1] 
+            # Check if on board 
+            if (0 <= endRow < 8) and (0 <= endCol < 8):
+                endPiece = self.board[endRow][endCol] 
+                # Empty square 
+                if endPiece == "-": 
+                        moves.append(Move((row, col), (endRow, endCol), self.board))
+                # Square with opponent piece 
+                elif endPiece.islower() ^ self.whiteToMove: 
+                        moves.append(Move((row, col), (endRow, endCol), self.board))
+                        
+
+
 
     def getBishopMoves(self, row, col, moves): 
-        pass 
+        directions = ((-1,-1), (-1, 1), (1, -1), (1,1)) 
+        for d in directions: 
+            # Check 1-7 rows and columns 
+            for i in range(1,8): 
+                # Check for each square on file and rank 
+                endRow = row + d[0]*i 
+                endCol = col + d[1]*i 
+                # Check if on board 
+                if (0 <= endRow < 8) and (0 <= endCol < 8): 
+                    endPiece = self.board[endRow][endCol] 
+                    # Bishop can move to empty space 
+                    if endPiece == "-": 
+                        moves.append(Move((row, col), (endRow, endCol), self.board))
+                    # Bishop can take enemy piece 
+                    elif endPiece.islower() ^ self.whiteToMove: 
+                        moves.append(Move((row, col), (endRow, endCol), self.board))
+                        break 
+                    # Case for friendly case which breaks loop 
+                    else: 
+                        break 
+                # Case for off board which breaks loop 
+                else: 
+                    break 
 
     def getQueenMoves(self, row, col, moves): 
         pass 
