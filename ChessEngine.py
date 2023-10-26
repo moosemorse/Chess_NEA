@@ -41,14 +41,14 @@ class GameState():
 
     # All moves without considering checks 
     def getMoves(self): 
-        moves = [Move((6,4), (4,6), self.board)]
+        moves = []
         # Check each square of 8x8 array 
         for row in range(8): 
             for col in range(8): 
                 # Get piece at position of board 
                 piece = self.board[row][col]
                 # If letter is lower-case, white piece and if it is upper-case, black piece 
-                if (piece.islower() and self.whiteToMove) and (piece.isupper() and not self.whiteTomMove): 
+                if (piece.islower() and self.whiteToMove) or (piece.isupper() and not self.whiteToMove): 
                     piece = piece.lower() 
                     if piece == "p": 
                         self.getPawnMoves(row, col, moves)
@@ -57,7 +57,14 @@ class GameState():
         return moves 
 
     def getPawnMoves(self, row, col, moves): 
-        pass 
+        # Check if white pawn is to move 
+        if self.whiteToMove: 
+            # One square pawn advance 
+            if self.board[row-1][col-1] == "-": 
+                moves.append(Move((row,col), (row-1,col), self.board))
+                # If pawn hasn't moved yet, it can move two squares forward 
+                if row == 6 and self.board[row-2][col] == "-":
+                    moves.append(Move((row,col), (row-2,col), self.board))
 
     def getRookMoves(self, row, col, moves): 
         pass 
