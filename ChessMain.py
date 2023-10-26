@@ -72,10 +72,13 @@ def main():
                         # Update gamestate by making move 
                         state.makeMove(move) 
                         moveMade = True 
-                    # Reset user clicks 
-                    sqSelected = () 
-                    playerClicks = [] 
-
+                        # Reset user clicks if valid move 
+                        sqSelected = () 
+                        playerClicks = [] 
+                    else: 
+                        # Quicker movement of pieces, if accidentally moved a piece 
+                        playerClicks = [sqSelected]
+       
             # Key handler 
             elif event.type == pygame.KEYDOWN: 
                 # If key 'z' is pressed, execute undoMove 
