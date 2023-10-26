@@ -9,7 +9,7 @@ class GameState():
             ["-", "-", "-", "-", "-", "-", "-", "-"],
             ["-", "-", "-", "-", "-", "-", "-", "-"],
             ["-", "-", "-", "-", "-", "-", "-", "-"],
-            ["-", "-", "-", "-", "-", "-", "-", "-"],
+            ["-", "-", "-", "P", "-", "-", "-", "-"],
             ["p", "p", "p", "p", "p", "p", "p", "p"],
             ["r", "n", "b", "q", "k", "b", "n", "r"]
         ]
@@ -26,7 +26,7 @@ class GameState():
             # Log move 
             self.moveLog.append(move)
             # Switch players 
-            self.whiteTomMove = not self.whiteToMove    
+            self.whiteToMove = not self.whiteToMove    
     
     def undoMove(self): 
         # Check if 'moveLog' is empty 
@@ -60,11 +60,39 @@ class GameState():
         # Check if white pawn is to move 
         if self.whiteToMove: 
             # One square pawn advance 
-            if self.board[row-1][col-1] == "-": 
+            if self.board[row-1][col] == "-": 
                 moves.append(Move((row,col), (row-1,col), self.board))
                 # If pawn hasn't moved yet, it can move two squares forward 
                 if row == 6 and self.board[row-2][col] == "-":
                     moves.append(Move((row,col), (row-2,col), self.board))
+            # Check if pawn is not on edge of screen 
+            if col-1 >= 0:
+                # Check if piece diagonally to left is black 
+                if self.board[row-1][col-1].isupper(): 
+                    # Pawn can capture piece 
+                    moves.append(Move((row, col), (row-1, col-1), self.board)) 
+            if col+1 <= 7: 
+                if self.board[row-1][col+1].isupper(): 
+                    moves.append(Move((row, col), (row-1, col+1), self.board)) 
+
+        # Check if black pawn is to move 
+        else:  
+            # One square pawn advance 
+            if self.board[row+1][col] == "-": 
+                moves.append(Move((row,col), (row+1,col), self.board))
+                # If pawn hasn't moved yet, it can move two squares forward 
+                if row == 1 and self.board[row+2][col] == "-":
+                    moves.append(Move((row,col), (row+2,col), self.board))
+            # Check if pawn is not on edge of screen 
+            if col-1 >= 0:
+                # Check if piece diagonally to left is black 
+                if self.board[row+1][col-1].islower(): 
+                    # Pawn can capture piece 
+                    moves.append(Move((row, col), (row+1, col-1), self.board)) 
+            if col+1 <= 7: 
+                if self.board[row+1][col+1].islower(): 
+                    moves.append(Move((row, col), (row+1, col+1), self.board)) 
+
 
     def getRookMoves(self, row, col, moves): 
         pass 
