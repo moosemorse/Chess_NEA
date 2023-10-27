@@ -137,7 +137,6 @@ class GameState():
             Add pawn promotion and en Passant logic after 
             """
 
-
     def getRookMoves(self, row, col, moves): 
         piecePinned = False 
         pinDirection = () 
@@ -200,9 +199,6 @@ class GameState():
                     elif endPiece.islower() ^ self.whiteToMove: 
                             moves.append(Move((row, col), (endRow, endCol), self.board))
                         
-
-
-
     def getBishopMoves(self, row, col, moves): 
         piecePinned = False 
         pinDirection = () 
@@ -221,7 +217,7 @@ class GameState():
                 endCol = col + d[1]*i 
                 # Check if on board 
                 if (0 <= endRow < 8) and (0 <= endCol < 8): 
-                    if not piecePinned or pinDirection == d or pinDirection  == (-d[0], -d[1]): 
+                    if (not piecePinned) or (pinDirection == d) or (pinDirection  == (-d[0], -d[1])): 
                         endPiece = self.board[endRow][endCol] 
                         # Bishop can move to empty space 
                         if endPiece == "-": 
@@ -247,8 +243,8 @@ class GameState():
         colMoves = (-1, 0, 1, -1, 1, -1, 0, 1)
         # Check each tuple within directions 
         for i in range(8): 
-            endRow = row + rowMoves[0]
-            endCol = col + colMoves[1] 
+            endRow = row + rowMoves[i]
+            endCol = col + colMoves[i] 
             # Check if on board 
             if (0 <= endRow < 8) and (0 <= endCol < 8):
                 endPiece = self.board[endRow][endCol]  
@@ -267,7 +263,6 @@ class GameState():
                         self.whiteKingLocation = (row, col) 
                     else: 
                         self.blackKingLocation = (row, col) 
-
 
     # All moves considering checks 
     def getValidMoves(self): 
@@ -403,7 +398,6 @@ class GameState():
                 if (endPiece.islower() ^ self.whiteToMove) and (endPiece.lower() == "n"): 
                     inCheck = True 
                     checks.append((endRow, endCol, k[0], k[1]))    
-        
         return inCheck, pins, checks 
 
 class Move(): 
