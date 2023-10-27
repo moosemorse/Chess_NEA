@@ -176,8 +176,6 @@ class GameState():
                 else: 
                     break 
 
-
-
     def getKnightMoves(self, row, col, moves): 
         piecePinned = False
         for i in range(len(self.pins)-1, -1, -1): 
