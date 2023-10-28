@@ -68,14 +68,15 @@ def main():
                     move = ChessEngine.Move(playerClicks[0], playerClicks[1], state.board)
                     # Print notation of move (start --> end)
                     print(move.getNotation())
-                    if move in validMoves: 
-                        # Update gamestate by making move 
-                        state.makeMove(move) 
-                        moveMade = True 
-                        # Reset user clicks if valid move 
-                        sqSelected = () 
-                        playerClicks = [] 
-                    else: 
+                    for i in range(len(validMoves)): 
+                        if move == validMoves[i]:  
+                            # Update gamestate by making move 
+                            state.makeMove(validMoves[i]) 
+                            moveMade = True 
+                            # Reset user clicks if valid move 
+                            sqSelected = () 
+                            playerClicks = [] 
+                    if not moveMade: 
                         # Quicker movement of pieces, if accidentally moved a piece 
                         playerClicks = [sqSelected]
        
