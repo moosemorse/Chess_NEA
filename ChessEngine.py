@@ -45,10 +45,21 @@ class GameState():
                 self.blackKingLocation = (move.endRow, move.endCol)   
 
             # Pawn promotion 
-            if move.isPawnPromotion: 
-                queen = 'q' if not(self.whiteToMove) else 'Q' 
-                self.board[move.endRow][move.endCol] = queen
-
+            if move.isPawnPromotion:
+                # All pieces player can promote to 
+                validPieces = ('q', 'n', 'r', 'b')
+                while True:
+                    promotedPiece = input("Select which piece to promote to ('Q', 'N', 'R', 'B'): ").lower()
+                    if promotedPiece in validPieces:
+                        # Because self.whiteToMove switched earlier in algorithm  
+                        if self.whiteToMove:
+                            # Black piece 
+                            promotedPiece = promotedPiece.upper()
+                        self.board[move.endRow][move.endCol] = promotedPiece
+                        break
+                    else:
+                        print("Please choose 'q', 'n', 'r', or 'b'.")
+    
             # En Passant 
             if move.isEnPassant: 
                 # Capture pawn 
