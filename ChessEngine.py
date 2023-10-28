@@ -181,9 +181,6 @@ class GameState():
                     if not piecePinned or pinDirection == (1, 1):
                         # En Passant capture 
                         moves.append(Move((row,col), (row+1, col+1), self.board, isEnPassant=True))
-            """ 
-            Add pawn promotion and en Passant logic after 
-            """
 
     def getRookMoves(self, row, col, moves): 
         piecePinned = False 
@@ -417,7 +414,7 @@ class GameState():
                         """
                         if ((0 <= i <= 3) and (endPiece.lower() == "r")) or ((4 <= i <= 7) and (endPiece.lower() == "b")) or \
                         (endPiece.lower() == "q") or (j == 1 and endPiece.lower() == "k") or \
-                        (endPiece.lower() == "p" and j == 1 and ((endPiece.isupper() and self.whiteToMove) and 6 <= i <= 7) or (endPiece.islower() and not(self.whiteToMove) and 4 <= i <=5)):
+                        (endPiece.lower() == "p" and j == 1 and (((endPiece.isupper() and self.whiteToMove) and 4 <= i <= 5) or (endPiece.islower() and not(self.whiteToMove) and 6 <= i <=7))):
                             # No piece blocking, so it would be a direct check  
                             if possiblePin == (): 
                                 inCheck = True
