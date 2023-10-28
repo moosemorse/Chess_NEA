@@ -239,12 +239,11 @@ class GameState():
         self.getBishopMoves(row, col, moves) 
 
     def getKingMoves(self, row, col, moves): 
-        rowMoves = (-1, -1, -1, 0, 0, 1, 1, 1) 
-        colMoves = (-1, 0, 1, -1, 1, -1, 0, 1)
+        directions = ((-1,-1), (-1,0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1,1)) 
         # Check each tuple within directions 
-        for i in range(8): 
-            endRow = row + rowMoves[i]
-            endCol = col + colMoves[i] 
+        for d in directions: 
+            endRow = row + d[0] 
+            endCol = col + d[1] 
             # Check if on board 
             if (0 <= endRow < 8) and (0 <= endCol < 8):
                 endPiece = self.board[endRow][endCol]  
@@ -254,7 +253,8 @@ class GameState():
                         self.whiteKingLocation = (endRow, endCol) 
                     else: 
                         self.blackKingLocation = (endRow, endCol) 
-                    inCheck, pins, checks = self.checkForPinsAndCheck()
+                    # Function returns three outputs 
+                    inCheck, _, _ = self.checkForPinsAndCheck()
                     # Check if (endRow, endCol) would leave king vulnerable, if not add to moves 
                     if not inCheck: 
                         moves.append(Move((row,col), (endRow, endCol), self.board)) 
@@ -354,14 +354,14 @@ class GameState():
                 if (0 <= endRow < 8) and (0 <= endCol < 8): 
                     endPiece = self.board[endRow][endCol] 
                     # Check if ally piece and that piece is not a king 
-                    if endPiece.isupper() ^ self.whiteToMove and endPiece.lower() != "k": 
+                    if (endPiece.isupper() ^ self.whiteToMove) and (endPiece.lower() != "k") and (endPiece.lower() != "-"): 
                         # First allied piece could be pinned 
                         if possiblePin == (): 
                             possiblePin = (endRow, endCol, d[0], d[1]) 
                         else: 
                             break 
                     # Case for enemy piece 
-                    elif not(endPiece.isupper() ^ self.whiteToMove): 
+                    elif not(endPiece.isupper() ^ self.whiteToMove) and (endPiece.lower() != "-"): 
                         """ 
                         1) Check for all directions of Rook and Bishop directions 
                         2) Check if piece is a queen or if a king is one space away 
