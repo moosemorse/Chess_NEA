@@ -25,6 +25,10 @@ class GameState():
         self.checkMate = False
         self.staleMate = False
         self.enPassantPossible = () 
+        self.currentCastlingRights = CastleRights(True, True, True, True) 
+        self.castleRightsLog = [CastleRights(self.currentCastlingRights.wks, self.currentCastlingRights.bks, 
+                                             self.currentCastlingRights.wqs, self.currentCastlingRights.bqs)] 
+        
     
     def makeMove(self, move): 
         # Check if square is empty 
@@ -42,7 +46,7 @@ class GameState():
             if move.pieceMoved == "k": 
                 self.whiteKingLocation = (move.endRow, move.endCol) 
             if move.pieceMoved == "K": 
-                self.blackKingLocation = (move.endRow, move.endCol)   
+                self.blackKingLocation = (move.endRow, move.endCol)
 
             # Pawn promotion 
             if move.isPawnPromotion:
@@ -70,6 +74,9 @@ class GameState():
                 self.enPassantPossible = ((move.startRow + move.endRow)//2, (move.startCol))
             else: 
                 self.enPassantPossible = () 
+            
+            # Handle castle rights 
+            updateCastleRights(move) 
 
     def undoMove(self): 
         # Check if 'moveLog' is empty 
@@ -94,7 +101,32 @@ class GameState():
             # Undo 2 square pawn advance 
             if move.pieceMoved.lower() == 'p' and abs(move.startRow - move.endRow) == 2: 
                 self.enPassantPossible = () 
-            
+    
+    # Update castle rights given move 
+
+    def updateCastleRights(self, move): 
+        if move.pieceMoved == 'k': 
+            self.currentCastlingRights.wks = False 
+            self.currentCastlingRights.wqs = False
+        elif move.pieceMoved == 'K': 
+            self.currentCastlingRights.bks = False
+            self.currentCastlingRights.bqs = False 
+        elif move.pieceMoved == 'r': 
+            # Looking at left rook 
+            if move.startRow == 7 and move.startCol == 0: 
+                self.currentCastlingRights.wqs = False
+            # Looking at right rook 
+            else: 
+                self.currentCastlingRights.wks = False
+        elif move.pieceMoved == 'R': 
+            # Looking at left rook 
+            if move.startRow == 0 and move.startCol == 0: 
+                self.currentCastlingRights.bqs = False
+            # Looking at right rook 
+            else: 
+                self.currentCastlingRights.bks = False
+        self.castleRightsLog.append(CastleRights(self.currentCastlingRights.wks, self.currentCastlingRights.bks, 
+                                             self.currentCastlingRights.wqs, self.currentCastlingRights.bqs))
 
     # All moves without considering checks 
     def getMoves(self): 
@@ -455,6 +487,15 @@ class GameState():
                     inCheck = True 
                     checks.append((endRow, endCol, k[0], k[1]))    
         return inCheck, pins, checks 
+    
+class CastleRights(): 
+    
+    def __init__(self, wks, bks, wqs, bqs): 
+        self.wks = wks 
+        self.bks = bks 
+        self.wqs = wqs 
+        self.bqs = bqs 
+
 
 class Move(): 
     # Dictionary for mapping values to file/rank notation 
