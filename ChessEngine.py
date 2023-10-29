@@ -403,6 +403,7 @@ class GameState():
     def getCastleMoves(self, row, col, moves): 
         # Can't castle if king in check 
         if not(self.inCheck): 
+            print("Not in check") 
             # Check black/white castle king side 
             if(self.whiteToMove and self.currentCastlingRights.wks) or (not self.whiteToMove and self.currentCastlingRights.bks): 
                 self.getKingsideCastleMoves(row, col, moves)
@@ -422,8 +423,12 @@ class GameState():
                 if self.whiteToMove: 
                     self.whiteKingLocation = (row, col + i) 
                     # inCheck for that particular square (row, col + i) 
+                    print("Here - checkForPinsAndCheck") 
                     inCheck, pins, checks = self.checkForPinsAndCheck()
+                    print(check) 
                     if inCheck: 
+                        print("Check == True")
+                        print(check) 
                         check = True 
                     self.whiteKingLocation = (row, col) 
                 else: 
@@ -449,14 +454,14 @@ class GameState():
                 if self.whiteToMove: 
                     self.whiteKingLocation = (row, col - i) 
                     # inCheck for that particular square (row, col - i) 
-                    inCheck, pins, checks = self.checkForPinsAndCheck
+                    inCheck, pins, checks = self.checkForPinsAndCheck()
                     if inCheck == True: 
                         check = True 
                     self.whiteKingLocation = (row, col) 
                 else: 
                     self.blackKingLocation = (row, col - i) 
                     # inCheck for that particular square (row, col - i) 
-                    inCheck, pins, checks = self.checkForPinsAndCheck
+                    inCheck, pins, checks = self.checkForPinsAndCheck()
                     if inCheck == True: 
                         check = True 
                     # Reset kings location 
