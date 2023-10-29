@@ -92,7 +92,7 @@ def main():
             moveMade = False 
 
         # Draw the current board 
-        drawGameState(screen, state, IMAGES, SQ_SIZE)  
+        drawGameState(screen, state, IMAGES, SQ_SIZE, validMoves, sqSelected)  
         clock.tick(FPS) 
         pygame.display.flip() 
 
