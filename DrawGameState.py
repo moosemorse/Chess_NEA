@@ -33,7 +33,7 @@ def drawPieces(screen, board, images, size):
                 screen.blit(images[piece], pygame.Rect(col*size, row*size, size, size))
 
 def highlightSquares(screen, state, validMoves, sqSelected, size): 
-    # Make a square is selected 
+    # Make sure a square is selected 
     if sqSelected != (): 
         # Un-pack square selected 
         row, col = sqSelected
