@@ -1,6 +1,7 @@
 import pygame  
 import ChessEngine
 from DrawGameState import drawGameState
+import ChessAI
 
 # Initalise pygame 
 pygame.init() 
@@ -44,41 +45,48 @@ def main():
     # 'playerClicks' keeps track of player clicks, last pos to new pos 
     playerClicks= []
     run = True 
+    # If human playing white, this is true. If AI is playing, then false. 
+    playerOne = False
+    # Same as above but for black 
+    playerTwo = False 
     while run: 
+        # Check if it's human's turn by matching booleans 
+        humanTurn = (state.whiteToMove and playerOne) or (not state.whiteToMove and playerTwo)
         for event in pygame.event.get(): 
             if event.type == pygame.QUIT: 
                 run = False 
             # Mouse handler 
             elif event.type == pygame.MOUSEBUTTONDOWN: 
-                # Get location of mouse 
-                location = pygame.mouse.get_pos()
-                col = location[0]//SQ_SIZE
-                row = location[1]//SQ_SIZE
-                # Check if user selected same square twice 
-                if sqSelected == (row,col): 
-                    # Deselect square and clear player clicks 
-                    sqSelected = () 
-                    playerClicks = [] 
-                else: 
-                    sqSelected = (row, col) 
-                    # Append for both 1st and 2nd clicks 
-                    playerClicks.append(sqSelected) 
-                # Check if piece has been moved to another square 
-                if len(playerClicks) == 2: 
-                    move = ChessEngine.Move(playerClicks[0], playerClicks[1], state.board)
-                    # Print notation of move (start --> end)
-                    print(move.getNotation())
-                    for i in range(len(validMoves)): 
-                        if move == validMoves[i]:  
-                            # Update gamestate by making move 
-                            state.makeMove(validMoves[i]) 
-                            moveMade = True 
-                            # Reset user clicks if valid move 
-                            sqSelected = () 
-                            playerClicks = [] 
-                    if not moveMade: 
-                        # Quicker movement of pieces, if accidentally moved a piece 
-                        playerClicks = [sqSelected]
+                if humanTurn: 
+                    # Get location of mouse 
+                    location = pygame.mouse.get_pos()
+                    col = location[0]//SQ_SIZE
+                    row = location[1]//SQ_SIZE
+                    # Check if user selected same square twice 
+                    if sqSelected == (row,col): 
+                        # Deselect square and clear player clicks 
+                        sqSelected = () 
+                        playerClicks = [] 
+                    else: 
+                        sqSelected = (row, col) 
+                        # Append for both 1st and 2nd clicks 
+                        playerClicks.append(sqSelected) 
+                    # Check if piece has been moved to another square 
+                    if len(playerClicks) == 2: 
+                        move = ChessEngine.Move(playerClicks[0], playerClicks[1], state.board)
+                        # Print notation of move (start --> end)
+                        print(move.getNotation())
+                        for i in range(len(validMoves)): 
+                            if move == validMoves[i]:  
+                                # Update gamestate by making move 
+                                state.makeMove(validMoves[i]) 
+                                moveMade = True 
+                                # Reset user clicks if valid move 
+                                sqSelected = () 
+                                playerClicks = [] 
+                        if not moveMade: 
+                            # Quicker movement of pieces, if accidentally moved a piece 
+                            playerClicks = [sqSelected]
        
             # Key handler 
             elif event.type == pygame.KEYDOWN: 
@@ -86,6 +94,13 @@ def main():
                 if event.key == pygame.K_z: 
                     state.undoMove()
                     moveMade = True  
+
+        # AI moves 
+        if not humanTurn: 
+            AIMove = ChessAI.findRandomMove(validMoves) 
+            state.makeMove(AIMove) 
+            moveMade = True 
+        
 
         if moveMade: 
             validMoves = state.getValidMoves() 
