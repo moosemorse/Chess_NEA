@@ -59,4 +59,3 @@ def highlightSquares(screen, state, validMoves, sqSelected, size):
                         # Highlight squares that are valid and empty  
                         highlight.fill(pygame.Color('#ade4bd'))
                         screen.blit(highlight, (move.endCol*size, move.endRow*size))
-                    
