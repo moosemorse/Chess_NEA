@@ -46,9 +46,11 @@ def main():
     playerClicks= []
     run = True 
     # If human playing white, this is true. If AI is playing, then false. 
-    playerOne = False
+    playerOne = True
     # Same as above but for black 
-    playerTwo = False 
+    playerTwo = True 
+    # Flag for game over
+    gameOver = False  
     while run: 
         # Check if it's human's turn by matching booleans 
         humanTurn = (state.whiteToMove and playerOne) or (not state.whiteToMove and playerTwo)
@@ -57,7 +59,7 @@ def main():
                 run = False 
             # Mouse handler 
             elif event.type == pygame.MOUSEBUTTONDOWN: 
-                if humanTurn: 
+                if humanTurn and not gameOver: 
                     # Get location of mouse 
                     location = pygame.mouse.get_pos()
                     col = location[0]//SQ_SIZE
@@ -94,9 +96,16 @@ def main():
                 if event.key == pygame.K_z: 
                     state.undoMove()
                     moveMade = True  
+                # Reset the board when 'r' is pressed 
+                if event.key == pygame.K_r: 
+                    state = ChessEngine.GameState() 
+                    validMoves = state.getValidMoves() 
+                    sqSelected = () 
+                    playerClicks = [] 
+                    moveMade = False 
 
         # AI moves 
-        if not humanTurn: 
+        if not humanTurn and not gameOver: 
             AIMove = ChessAI.findRandomMove(validMoves) 
             state.makeMove(AIMove) 
             moveMade = True 
@@ -107,9 +116,28 @@ def main():
             moveMade = False 
 
         # Draw the current board 
-        drawGameState(screen, state, IMAGES, SQ_SIZE, validMoves, sqSelected)  
+        drawGameState(screen, state, IMAGES, SQ_SIZE, validMoves, sqSelected) 
+
+        if state.checkmate: 
+            # End of game, so set flag as true 
+            gameOver = True 
+            drawText(screen, 'checkmate')
+        elif state.stalemate: 
+            gameOver = True 
+            drawText(screen, 'stalemate')
+
         clock.tick(FPS) 
         pygame.display.flip() 
+
+def drawText(screen, text): 
+    # Font of text 
+    font = pygame.font.SysFont('Monospace', 26, True, False) 
+    # Render object 
+    textObject = font.render(text, 0, pygame.Color('Blue'))
+    # Center object 
+    textLocation = pygame.Rect(0,0, WIDTH, HEIGHT).move(WIDTH/2 - textObject.get_width()/2, HEIGHT/2 - textObject.get_height()/2)
+    # Draw object 
+    screen.blit(textObject, textLocation) 
 
 if __name__ == "__main__": 
     main()
