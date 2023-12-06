@@ -4,7 +4,7 @@ import random
 pieceScore = {"K": 20000, "Q": 900, "R": 500, "B": 330, "N": 320, "P": 100}
 
 """ 
-piece-square table values for each piece represented as a one dimensional list 
+piece-square table values for each piece represented as a 2D array 
 """
 pieceSquare = {"K": [
     [-30,-40,-40,-50,-50,-40,-40,-30,]
@@ -99,3 +99,6 @@ def scorePosition(board):
                 elif square.isupper(): 
                     positionScore -= pieceSquare[square.upper()][row][square]
     return positionScore
+
+def scoreBoard(state): 
+    pass 
