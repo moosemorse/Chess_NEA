@@ -46,9 +46,9 @@ def main():
     playerClicks= []
     run = True 
     # If human playing white, this is true. If AI is playing, then false. 
-    playerOne = True
+    playerOne = False
     # Same as above but for black 
-    playerTwo = True 
+    playerTwo = True
     # Flag for game over
     gameOver = False  
     while run: 
@@ -106,7 +106,9 @@ def main():
 
         # AI moves 
         if not humanTurn and not gameOver: 
-            AIMove = ChessAI.findRandomMove(validMoves) 
+            AIMove = ChessAI.makeBestMove(state, validMoves) 
+            if AIMove is None: 
+                AIMove = ChessAI.findRandomMove(validMoves) 
             state.makeMove(AIMove) 
             moveMade = True 
         
