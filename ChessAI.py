@@ -66,7 +66,7 @@ CHECKMATE = 100000
 # Stalemate score 
 STALEMATE = 0 
 # Max depth level 
-DEPTH = 3
+DEPTH = 0
 
 def findRandomMove(validMoves): 
     # Generate random index 

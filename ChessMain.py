@@ -46,7 +46,7 @@ def main():
     playerClicks= []
     run = True 
     # If human playing white, this is true. If AI is playing, then false. 
-    playerOne = False
+    playerOne = True
     # Same as above but for black 
     playerTwo = False
     # Flag for game over
@@ -94,8 +94,10 @@ def main():
             elif event.type == pygame.KEYDOWN: 
                 # If key 'z' is pressed, execute undoMove 
                 if event.key == pygame.K_z: 
-                    state.undoMove()
-                    moveMade = True  
+                    if humanTurn: 
+                        state.undoMove()
+                        state.undoMove() 
+                        moveMade = True  
                 # Reset the board when 'r' is pressed 
                 if event.key == pygame.K_r: 
                     state = ChessEngine.GameState() 
