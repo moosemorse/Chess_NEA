@@ -66,7 +66,7 @@ CHECKMATE = 100000
 # Stalemate score 
 STALEMATE = 0 
 # Max depth level 
-DEPTH = 2 
+DEPTH = 3
 
 def findRandomMove(validMoves): 
     # Generate random index 
@@ -113,7 +113,7 @@ def scoreBoard(state):
         return STALEMATE 
     
     # Total evaluation depends on weighted position and material gain 
-    evalScore = scorePosition(state.board)*0.1 + scoreMaterial(state.board) 
+    evalScore = scorePosition(state.board) + scoreMaterial(state.board) 
     return evalScore 
 
 def negaMaxAlphaBeta(state, validMoves, depth, alpha, beta, turnMultiplier): 

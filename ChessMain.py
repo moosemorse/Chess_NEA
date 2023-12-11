@@ -48,7 +48,7 @@ def main():
     # If human playing white, this is true. If AI is playing, then false. 
     playerOne = False
     # Same as above but for black 
-    playerTwo = True
+    playerTwo = False
     # Flag for game over
     gameOver = False  
     while run: 
@@ -109,7 +109,7 @@ def main():
             AIMove = ChessAI.makeBestMove(state, validMoves) 
             if AIMove is None: 
                 AIMove = ChessAI.findRandomMove(validMoves) 
-            state.makeMove(AIMove) 
+            state.makeMove(AIMove, AI = True) 
             moveMade = True 
         
 

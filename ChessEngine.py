@@ -30,7 +30,7 @@ class GameState():
                                              self.currentCastlingRights.wqs, self.currentCastlingRights.bqs)] 
         
     
-    def makeMove(self, move): 
+    def makeMove(self, move, AI = False): 
         # Check if square is empty 
         if self.board[move.startRow][move.startCol] != "-": 
             # Position of piece moved will be empty 
@@ -49,7 +49,7 @@ class GameState():
                 self.blackKingLocation = (move.endRow, move.endCol)
 
             # Pawn promotion 
-            if move.isPawnPromotion:
+            if move.isPawnPromotion and not AI:
                 # All pieces player can promote to 
                 validPieces = ('q', 'n', 'r', 'b')
                 while True:
@@ -63,6 +63,12 @@ class GameState():
                         break
                     else:
                         print("Please choose 'q', 'n', 'r', or 'b'.")
+            # AI is making pawn promotion 
+            elif move.isPawnPromotion and AI: 
+                promotedPiece = 'q' 
+                if self.whiteToMove: 
+                    promotedPiece = promotedPiece.upper() 
+                self.board[move.endRow][move.endCol] = promotedPiece
     
             # En Passant 
             if move.isEnPassant: 
