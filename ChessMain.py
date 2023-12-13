@@ -105,6 +105,8 @@ def main():
                     sqSelected = () 
                     playerClicks = [] 
                     moveMade = False 
+                    gameOver = False 
+                    humanTurn = True 
 
         # AI moves 
         if not humanTurn and not gameOver: 
