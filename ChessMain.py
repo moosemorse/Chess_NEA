@@ -46,9 +46,9 @@ def main():
     playerClicks= []
     run = True 
     # If human playing white, this is true. If AI is playing, then false. 
-    playerOne = True
+    playerOne = False
     # Same as above but for black 
-    playerTwo = False
+    playerTwo = True 
     # Flag for game over
     gameOver = False  
     while run: 
@@ -61,9 +61,13 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN: 
                 if humanTurn and not gameOver: 
                     # Get location of mouse 
-                    location = pygame.mouse.get_pos()
+                    location = pygame.mouse.get_pos() 
                     col = location[0]//SQ_SIZE
-                    row = location[1]//SQ_SIZE
+                    row = location[1]//SQ_SIZE 
+                    # If human is playing black, we need to flip square selected
+                    if playerTwo: 
+                        col = 7 - col 
+                        row = 7 - row 
                     # Check if user selected same square twice 
                     if sqSelected == (row,col): 
                         # Deselect square and clear player clicks 
@@ -122,7 +126,7 @@ def main():
             moveMade = False 
 
         # Draw the current board 
-        drawGameState(screen, state, IMAGES, SQ_SIZE, validMoves, sqSelected) 
+        drawGameState(screen, state, IMAGES, SQ_SIZE, validMoves, sqSelected, playerOne) 
 
         if state.checkmate: 
             # End of game, so set flag as true 
