@@ -12,7 +12,9 @@ def drawGameState(screen, state, images, size, validMoves, sqSelected, white):
 
 def drawButtons(screen, images, size): 
     # Draw resign flag 
-    screen.blit(images['flag'], pygame.Rect(10, 810, 60, 60))
+    screen.blit(images['resign'], pygame.Rect(10, 810, 60, 60))
+    screen.blit(images['undo'], pygame.Rect(110, 810, 60, 60))
+    screen.blit(images['reset'], pygame.Rect(210, 810, 60, 60))
 
 def drawBoard(screen, size): 
     # Light square 

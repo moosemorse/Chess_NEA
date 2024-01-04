@@ -25,8 +25,10 @@ def loadImages():
         # Store white piece 
         IMAGES[piece.lower()] = pygame.image.load(f"assets/piece/w_{piece}.png")
         IMAGES[piece.lower()] = pygame.transform.scale(IMAGES[piece.lower()], (SQ_SIZE,SQ_SIZE))
-    IMAGES['flag'] = pygame.image.load(f"assets/main_symbols/resign_flag.png")
-    IMAGES['flag'] = pygame.transform.scale(IMAGES['flag'], (80,80))
+    buttons = ['resign', 'reset', 'undo']
+    for button in buttons: 
+        IMAGES[button] = pygame.image.load(f"assets/main_symbols/{button}.png")
+        IMAGES[button] = pygame.transform.scale(IMAGES[button], (80,80)) 
 
 def main(): 
     # Create screen 
@@ -101,23 +103,22 @@ def main():
                                 # Quicker movement of pieces, if accidentally moved a piece 
                                 playerClicks = [sqSelected]
        
-            # Key handler 
-            elif event.type == pygame.KEYDOWN: 
-                # If key 'z' is pressed, execute undoMove 
-                if event.key == pygame.K_z: 
-                    if humanTurn: 
-                        state.undoMove()
-                        state.undoMove() 
-                        moveMade = True  
-                # Reset the board when 'r' is pressed 
-                if event.key == pygame.K_r: 
-                    state = ChessEngine.GameState() 
-                    validMoves = state.getValidMoves() 
-                    sqSelected = () 
-                    playerClicks = [] 
-                    moveMade = False 
-                    gameOver = False 
-                    humanTurn = True 
+                    # Handle undo event 
+                    if col == 1 and row == 8:
+                        if humanTurn: 
+                            state.undoMove()
+                            state.undoMove() 
+                            moveMade = True  
+
+                    # Handle reset event 
+                    if col == 2 and row == 8: 
+                        state = ChessEngine.GameState() 
+                        validMoves = state.getValidMoves() 
+                        sqSelected = () 
+                        playerClicks = [] 
+                        moveMade = False 
+                        gameOver = False 
+                        humanTurn = True 
 
         # AI moves 
         if not humanTurn and not gameOver: 
