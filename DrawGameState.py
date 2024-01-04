@@ -7,6 +7,12 @@ def drawGameState(screen, state, images, size, validMoves, sqSelected, white):
     highlightSquares(screen, state, validMoves, sqSelected, size, white)
     # Draw pieces ontop of squares 
     drawPieces(screen, state.board, images, size, white) 
+    # Draw buttons 
+    drawButtons(screen, images, size)
+
+def drawButtons(screen, images, size): 
+    # Draw resign flag 
+    screen.blit(images['flag'], pygame.Rect(10, 810, 60, 60))
 
 def drawBoard(screen, size): 
     # Light square 

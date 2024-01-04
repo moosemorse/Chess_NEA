@@ -7,11 +7,11 @@ import ChessAI
 pygame.init() 
 
 # Screen dimensions
-HEIGHT = 800 
-WIDTH = 800 
+HEIGHT = 900  
+WIDTH = 1000 
 
 # Square dimensions 
-SQ_SIZE = HEIGHT//8 
+SQ_SIZE = 800//8 
 FPS = 30 
 IMAGES = {} 
 
@@ -25,12 +25,14 @@ def loadImages():
         # Store white piece 
         IMAGES[piece.lower()] = pygame.image.load(f"assets/piece/w_{piece}.png")
         IMAGES[piece.lower()] = pygame.transform.scale(IMAGES[piece.lower()], (SQ_SIZE,SQ_SIZE))
+    IMAGES['flag'] = pygame.image.load(f"assets/main_symbols/resign_flag.png")
+    IMAGES['flag'] = pygame.transform.scale(IMAGES['flag'], (80,80))
 
 def main(): 
     # Create screen 
     screen = pygame.display.set_mode((WIDTH, HEIGHT)) 
     clock = pygame.time.Clock()
-    screen.fill(pygame.Color("White"))
+    screen.fill(pygame.Color("#ebecd0"))
 
     # Import game state from ChessEngine file 
     state = ChessEngine.GameState() 
@@ -64,35 +66,40 @@ def main():
                     location = pygame.mouse.get_pos() 
                     col = location[0]//SQ_SIZE
                     row = location[1]//SQ_SIZE 
-                    # If human is playing black, we need to flip square selected
-                    if playerTwo: 
-                        col = 7 - col 
-                        row = 7 - row 
-                    # Check if user selected same square twice 
-                    if sqSelected == (row,col): 
-                        # Deselect square and clear player clicks 
-                        sqSelected = () 
-                        playerClicks = [] 
-                    else: 
-                        sqSelected = (row, col) 
-                        # Append for both 1st and 2nd clicks 
-                        playerClicks.append(sqSelected) 
-                    # Check if piece has been moved to another square 
-                    if len(playerClicks) == 2: 
-                        move = ChessEngine.Move(playerClicks[0], playerClicks[1], state.board)
-                        # Print notation of move (start --> end)
-                        print(move.getNotation())
-                        for i in range(len(validMoves)): 
-                            if move == validMoves[i]:  
-                                # Update gamestate by making move 
-                                state.makeMove(validMoves[i]) 
-                                moveMade = True 
-                                # Reset user clicks if valid move 
-                                sqSelected = () 
-                                playerClicks = [] 
-                        if not moveMade: 
-                            # Quicker movement of pieces, if accidentally moved a piece 
-                            playerClicks = [sqSelected]
+                    # Resign button position clicked 
+                    if col == 0 and row == 8: 
+                        gameOver = True  
+                    # Check if mouse position is on chess board 
+                    if col <= 7 and row <= 7: 
+                        # If human is playing black, we need to flip square selected
+                        if playerTwo: 
+                            col = 7 - col 
+                            row = 7 - row 
+                        # Check if user selected same square twice 
+                        if sqSelected == (row,col): 
+                            # Deselect square and clear player clicks 
+                            sqSelected = () 
+                            playerClicks = [] 
+                        else: 
+                            sqSelected = (row, col) 
+                            # Append for both 1st and 2nd clicks 
+                            playerClicks.append(sqSelected) 
+                        # Check if piece has been moved to another square 
+                        if len(playerClicks) == 2: 
+                            move = ChessEngine.Move(playerClicks[0], playerClicks[1], state.board)
+                            # Print notation of move (start --> end)
+                            print(move.getNotation())
+                            for i in range(len(validMoves)): 
+                                if move == validMoves[i]:  
+                                    # Update gamestate by making move 
+                                    state.makeMove(validMoves[i]) 
+                                    moveMade = True 
+                                    # Reset user clicks if valid move 
+                                    sqSelected = () 
+                                    playerClicks = [] 
+                            if not moveMade: 
+                                # Quicker movement of pieces, if accidentally moved a piece 
+                                playerClicks = [sqSelected]
        
             # Key handler 
             elif event.type == pygame.KEYDOWN: 
@@ -128,6 +135,10 @@ def main():
         # Draw the current board 
         drawGameState(screen, state, IMAGES, SQ_SIZE, validMoves, sqSelected, playerOne) 
 
+        # If state hasn't reached checkmate or stalemate
+        # Then user has resigned 
+        if gameOver == True: 
+            drawText(screen, 'RESIGNED')
         if state.checkmate: 
             # End of game, so set flag as true 
             gameOver = True 
