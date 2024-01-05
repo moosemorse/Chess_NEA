@@ -89,18 +89,26 @@ def drawMoveLog(screen, state, font):
     pygame.draw.rect(screen, pygame.Color('#ebecd0'), moveLogRect)
     # Store move log list 
     moveLog = state.moveLog
+    moveTexts = [] 
+    for i in range (0, len(moveLog), 2) : 
+        # Format text with index, notation and padding 
+        text = str(i//2 + 1) + ".  " + moveLog[i].getNotation() + "  "
+        # Check if black has made a move 
+        if i + 1 < len(moveLog): 
+            text += moveLog[i+1].getNotation() 
+        moveTexts.append(text) 
     padding = 10 
     # Y coordinante 
     textY = padding 
     # X coordinante 
-    textX = padding 
-    if len(moveLog) > 0: 
-        for i in range(len(moveLog)): 
-            text = moveLog[i].getNotation()
+    textX = padding  
+    if len(moveTexts) > 0: 
+        for i in range(len(moveTexts)): 
+            text = moveTexts[i]  
             # Render object 
             textObject = font.render(text, 0, pygame.Color('Black'))
             # Object location  
             textLocation = moveLogRect.move(padding, textY)  
             # Draw object 
             screen.blit(textObject, textLocation) 
-            textY += textObject.get_height() 
+            textY += textObject.get_height() + padding
