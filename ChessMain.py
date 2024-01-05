@@ -9,6 +9,9 @@ pygame.init()
 # Screen dimensions
 HEIGHT = 900  
 WIDTH = 1000 
+# Move log display box dimensions
+MOVE_LOG_WIDTH = 200
+MOVE_LOG_HEIGHT = HEIGHT 
 
 # Square dimensions 
 SQ_SIZE = 800//8 
@@ -35,7 +38,8 @@ def main():
     screen = pygame.display.set_mode((WIDTH, HEIGHT)) 
     clock = pygame.time.Clock()
     screen.fill(pygame.Color("#ebecd0"))
-
+    # Move Log Font field  
+    moveLogFont = pygame.font.SysFont('Arial', 12, False, False) 
     # Import game state from ChessEngine file 
     state = ChessEngine.GameState() 
     # Store a list of valid moves 
@@ -134,7 +138,7 @@ def main():
             moveMade = False 
 
         # Draw the current board 
-        drawGameState(screen, state, IMAGES, SQ_SIZE, validMoves, sqSelected, playerOne) 
+        drawGameState(screen, state, IMAGES, SQ_SIZE, validMoves, sqSelected, playerOne, moveLogFont) 
 
         # If state hasn't reached checkmate or stalemate
         # Then user has resigned 

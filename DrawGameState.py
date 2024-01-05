@@ -1,6 +1,6 @@
 import pygame 
 
-def drawGameState(screen, state, images, size, validMoves, sqSelected, white): 
+def drawGameState(screen, state, images, size, validMoves, sqSelected, white, moveLogFont): 
     # Draw squares onto screen 
     drawBoard(screen, size)
     # Highlight squares if needed 
@@ -8,9 +8,11 @@ def drawGameState(screen, state, images, size, validMoves, sqSelected, white):
     # Draw pieces ontop of squares 
     drawPieces(screen, state.board, images, size, white) 
     # Draw buttons 
-    drawButtons(screen, images, size)
+    drawButtons(screen, images )
+    # Draw Move Log display 
+    drawMoveLog(screen, state, moveLogFont)
 
-def drawButtons(screen, images, size): 
+def drawButtons(screen, images): 
     # Draw resign flag 
     screen.blit(images['resign'], pygame.Rect(10, 810, 60, 60))
     # Draw undo button 
@@ -80,3 +82,25 @@ def highlightSquares(screen, state, validMoves, sqSelected, size, white):
                         # Highlight squares that are valid and empty  
                         highlight.fill(pygame.Color('#ade4bd'))
                         screen.blit(highlight, (endCol*size, endRow*size))
+
+def drawMoveLog(screen, state, font): 
+    # Variable for move log rectangle object 
+    moveLogRect = pygame.Rect(800, 0, 200, 1000) 
+    pygame.draw.rect(screen, pygame.Color('#ebecd0'), moveLogRect)
+    # Store move log list 
+    moveLog = state.moveLog
+    padding = 10 
+    # Y coordinante 
+    textY = padding 
+    # X coordinante 
+    textX = padding 
+    if len(moveLog) > 0: 
+        for i in range(len(moveLog)): 
+            text = moveLog[i].getNotation()
+            # Render object 
+            textObject = font.render(text, 0, pygame.Color('Black'))
+            # Object location  
+            textLocation = moveLogRect.move(padding, textY)  
+            # Draw object 
+            screen.blit(textObject, textLocation) 
+            textY += textObject.get_height() 
