@@ -39,7 +39,7 @@ def main():
     clock = pygame.time.Clock()
     screen.fill(pygame.Color("#ebecd0"))
     # Move Log Font field  
-    moveLogFont = pygame.font.SysFont('Arial', 12, False, False) 
+    moveLogFont = pygame.font.SysFont('Arial', 15, True, False) 
     # Import game state from ChessEngine file 
     state = ChessEngine.GameState() 
     # Store a list of valid moves 
