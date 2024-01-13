@@ -2,6 +2,7 @@ import pygame
 import ChessEngine
 from DrawGameState import drawGameState
 import ChessAI
+import timer as t
 
 # Initalise pygame 
 pygame.init() 
@@ -17,6 +18,9 @@ MOVE_LOG_HEIGHT = HEIGHT
 SQ_SIZE = 800//8 
 FPS = 30 
 IMAGES = {} 
+
+timer = t.Timer(10) 
+timer_font = pygame.font.SysFont('Monospace', 26, True, False) 
 
 def loadImages(): 
     # Pass in dictionary to store images 
@@ -59,15 +63,22 @@ def main():
     playerTwo = True 
     # Flag for game over
     gameOver = False  
+    # Flag for end of time reached
+    time_end = False
     while run: 
         # Check if it's human's turn by matching booleans 
         humanTurn = (state.whiteToMove and playerOne) or (not state.whiteToMove and playerTwo)
+        # Time ends, game ends 
+        if timer.is_time_up() and not gameOver: 
+            gameOver = True 
+            drawText(screen, 'TIME UP') 
+            time_end = True 
         for event in pygame.event.get(): 
             if event.type == pygame.QUIT: 
-                run = False 
+                run = False
             # Mouse handler 
             elif event.type == pygame.MOUSEBUTTONDOWN: 
-                if humanTurn and not gameOver: 
+                if humanTurn and not gameOver:
                     # Get location of mouse 
                     location = pygame.mouse.get_pos() 
                     col = location[0]//SQ_SIZE
@@ -139,18 +150,20 @@ def main():
 
         # Draw the current board 
         drawGameState(screen, state, IMAGES, SQ_SIZE, validMoves, sqSelected, playerOne, moveLogFont) 
+        # Draw timer 
+        timer.draw(screen, timer_font, 610, 810)  
 
-        # If state hasn't reached checkmate or stalemate
-        # Then user has resigned 
-        if gameOver == True: 
+        if time_end:
+            drawText(screen, 'TIME UP')
+            gameOver = True
+        elif gameOver and not state.checkmate and not state.stalemate:
             drawText(screen, 'RESIGNED')
-        if state.checkmate: 
-            # End of game, so set flag as true 
-            gameOver = True 
+        elif state.checkmate:
             drawText(screen, 'checkmate')
-        elif state.stalemate: 
-            gameOver = True 
+            gameOver = True
+        elif state.stalemate:
             drawText(screen, 'stalemate')
+            gameOver = True
 
         clock.tick(FPS) 
         pygame.display.flip() 

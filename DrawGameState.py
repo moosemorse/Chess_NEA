@@ -99,7 +99,7 @@ def drawMoveLog(screen, state, font):
         moveTexts.append(text) 
     padding = 10 
     # Y coordinante 
-    textY = padding    
+    textY = padding  
     if len(moveTexts) > 0: 
         for i in range(len(moveTexts)): 
             text = moveTexts[i]  
