@@ -3,6 +3,7 @@ import ChessEngine
 from DrawGameState import drawGameState
 import ChessAI
 import timer as t
+from endOfGame import drawEndOfGame  
 
 # Initalise pygame 
 pygame.init() 
@@ -19,7 +20,7 @@ SQ_SIZE = 800//8
 FPS = 30 
 IMAGES = {} 
 
-timer = t.Timer(10) 
+timer = t.Timer(5) 
 timer_font = pygame.font.SysFont('Monospace', 26, True, False) 
 
 def loadImages(): 
@@ -58,9 +59,9 @@ def main():
     playerClicks= []
     run = True 
     # If human playing white, this is true. If AI is playing, then false. 
-    playerOne = False
+    playerOne = True
     # Same as above but for black 
-    playerTwo = True 
+    playerTwo = False 
     # Flag for game over
     gameOver = False  
     # Flag for end of time reached
@@ -154,10 +155,13 @@ def main():
         timer.draw(screen, timer_font, 610, 810)  
 
         if time_end:
-            drawText(screen, 'TIME UP')
+            drawEndOfGame(screen) 
             gameOver = True
+            run = False 
         elif gameOver and not state.checkmate and not state.stalemate:
-            drawText(screen, 'RESIGNED')
+            drawEndOfGame(screen) 
+            gameOver = True
+            run = False 
         elif state.checkmate:
             drawText(screen, 'checkmate')
             gameOver = True
