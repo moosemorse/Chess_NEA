@@ -33,7 +33,7 @@ def loadImages():
         # Store white piece 
         IMAGES[piece.lower()] = pygame.image.load(f"assets/piece/w_{piece}.png")
         IMAGES[piece.lower()] = pygame.transform.scale(IMAGES[piece.lower()], (SQ_SIZE,SQ_SIZE))
-    buttons = ['resign', 'reset', 'undo']
+    buttons = ['resign', 'undo']
     for button in buttons: 
         IMAGES[button] = pygame.image.load(f"assets/main_symbols/{button}.png")
         IMAGES[button] = pygame.transform.scale(IMAGES[button], (80,80)) 
