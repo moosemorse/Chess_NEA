@@ -3,13 +3,13 @@ import pygame
 def draw_button(screen, text, x, y, width, height):
     # Draw the button rectangle
     button_rect = pygame.Rect(x, y, width, height)
-    pygame.draw.rect(screen, (50,50,50), button_rect)
+    pygame.draw.rect(screen, (0,65,65), button_rect)
     
     # Create font object
     font = pygame.font.Font(None, 36) 
     
     # Render the text
-    text_surface = font.render(text, True, (200,0,200))
+    text_surface = font.render(text, True, (255,255,255))
     
     # Calculate the position for the text
     text_rect = text_surface.get_rect(center=button_rect.center)
@@ -19,8 +19,25 @@ def draw_button(screen, text, x, y, width, height):
     
     return button_rect
 
+def draw_text(screen, text, x, y, width, height): 
+    # Draw the button rectangle
+    button_rect = pygame.Rect(x, y, width, height)
+    pygame.draw.rect(screen, (15,15,15), button_rect)
+    
+    # Create font object
+    font = pygame.font.Font(None, 36) 
+    
+    # Render the text
+    text_surface = font.render(text, True, (255,255,255))
+    
+    # Calculate the position for the text
+    text_rect = text_surface.get_rect(center=button_rect.center)
+    
+    # Draw the text over the button
+    screen.blit(text_surface, text_rect.topleft)
 
-def drawEndOfGame(screen): 
+
+def drawEndOfGame(screen, time_left): 
     # Constants
     BOARD_WIDTH = 800
     BOARD_HEIGHT = 800
@@ -49,10 +66,35 @@ def drawEndOfGame(screen):
     # Calculate the starting y position of the first button
     button_y = window_y + button_margin
 
-    # Draw buttons
+    # Draw buttons/text 
+
+    # End of game state text 
+    draw_text(screen, 'LOSS', window_x + WINDOW_WIDTH//4, button_y, WINDOW_WIDTH//2, button_height)
+    # Update button_y for the next button
+    button_y += button_height + button_margin
+
+    # Cause of loss text  
+    draw_text(screen, 'You lose by time', window_x + WINDOW_WIDTH//4, button_y, WINDOW_WIDTH//2, button_height)
+    # Update button_y for the next button
+    button_y += button_height + button_margin
+
+    # Time left text 
+    draw_text(screen, f'Time left: {time_left}', window_x + WINDOW_WIDTH//4, button_y, WINDOW_WIDTH//2, button_height)
+    # Update button_y for the next button
+    button_y += button_height + button_margin
 
     # Play again button 
     play_again_button = draw_button(screen, 'Play again', window_x + WINDOW_WIDTH//4, button_y, WINDOW_WIDTH//2, button_height)
+    # Update button_y for the next button
+    button_y += button_height + button_margin
+    
+    # Main menu button 
+    main_menu_button = draw_button(screen, 'Main menu', window_x + WINDOW_WIDTH//4, button_y, WINDOW_WIDTH//2, button_height)
+    # Update button_y for the next button
+    button_y += button_height + button_margin
+
+    # Save game button 
+    save_game_button = draw_button(screen, 'Save game', window_x + WINDOW_WIDTH//4, button_y, WINDOW_WIDTH//2, button_height)
     # Update button_y for the next button
     button_y += button_height + button_margin
 

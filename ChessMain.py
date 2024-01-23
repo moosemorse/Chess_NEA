@@ -20,7 +20,7 @@ SQ_SIZE = 800//8
 FPS = 30 
 IMAGES = {} 
 
-timer = t.Timer(5) 
+timer = t.Timer(30) 
 timer_font = pygame.font.SysFont('Monospace', 26, True, False) 
 
 def loadImages(): 
@@ -126,16 +126,6 @@ def main():
                             state.undoMove() 
                             moveMade = True  
 
-                    # Handle reset event 
-                    if col == 2 and row == 8: 
-                        state = ChessEngine.GameState() 
-                        validMoves = state.getValidMoves() 
-                        sqSelected = () 
-                        playerClicks = [] 
-                        moveMade = False 
-                        gameOver = False 
-                        humanTurn = True 
-
         # AI moves 
         if not humanTurn and not gameOver: 
             AIMove = ChessAI.makeBestMove(state, validMoves) 
@@ -153,20 +143,22 @@ def main():
         drawGameState(screen, state, IMAGES, SQ_SIZE, validMoves, sqSelected, playerOne, moveLogFont) 
         # Draw timer 
         timer.draw(screen, timer_font, 610, 810)  
+        time_left = timer.get_total_time() 
 
         if time_end:
-            drawEndOfGame(screen) 
+            drawEndOfGame(screen, time_left) 
             gameOver = True
             run = False 
         elif gameOver and not state.checkmate and not state.stalemate:
-            drawEndOfGame(screen) 
+            drawEndOfGame(screen, time_left) 
             gameOver = True
             run = False 
         elif state.checkmate:
-            drawText(screen, 'checkmate')
+            drawEndOfGame(screen, time_left) 
             gameOver = True
+            run = False 
         elif state.stalemate:
-            drawText(screen, 'stalemate')
+            drawEndOfGame(screen, time_left) 
             gameOver = True
 
         clock.tick(FPS) 

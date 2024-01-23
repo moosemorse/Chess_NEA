@@ -4,12 +4,14 @@ class Timer:
     def __init__(self, total_time):
         self.total_time = total_time
         self.start_ticks = pygame.time.get_ticks()
+        self.time_left = total_time 
 
     def update(self):
         # Calculate the time passed since the timer was started
         ticks_passed = (pygame.time.get_ticks() - self.start_ticks) // 1000
         time_left = self.total_time - ticks_passed
-        return max(time_left, 0)
+        self.time_left = time_left 
+        return max(time_left, 0) 
 
     def draw(self, screen, font, x, y):
         # Update the time left 
@@ -31,3 +33,11 @@ class Timer:
 
     def is_time_up(self):
         return self.update() <= 0
+    
+    def get_total_time(self): 
+        time_left = self.time_left
+        minutes = time_left // 60
+        seconds = time_left % 60
+        # Timer text '00:00' 
+        timer_text = f'{minutes}:{seconds:02d}'  
+        return timer_text 
