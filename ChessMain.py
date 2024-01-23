@@ -71,8 +71,6 @@ def main():
         humanTurn = (state.whiteToMove and playerOne) or (not state.whiteToMove and playerTwo)
         # Time ends, game ends 
         if timer.is_time_up() and not gameOver: 
-            gameOver = True 
-            drawText(screen, 'TIME UP') 
             time_end = True 
         for event in pygame.event.get(): 
             if event.type == pygame.QUIT: 
@@ -146,20 +144,21 @@ def main():
         time_left = timer.get_total_time() 
 
         if time_end:
-            drawEndOfGame(screen, time_left) 
+            drawEndOfGame(screen, time_left, humanTurn, time_end, state) 
             gameOver = True
             run = False 
         elif gameOver and not state.checkmate and not state.stalemate:
-            drawEndOfGame(screen, time_left) 
+            drawEndOfGame(screen, time_left, humanTurn, time_end, state) 
             gameOver = True
             run = False 
         elif state.checkmate:
-            drawEndOfGame(screen, time_left) 
+            drawEndOfGame(screen, time_left, humanTurn, time_end, state) 
             gameOver = True
             run = False 
         elif state.stalemate:
-            drawEndOfGame(screen, time_left) 
+            drawEndOfGame(screen, time_left, humanTurn, time_end, state) 
             gameOver = True
+            run = False 
 
         clock.tick(FPS) 
         pygame.display.flip() 

@@ -36,8 +36,28 @@ def draw_text(screen, text, x, y, width, height):
     # Draw the text over the button
     screen.blit(text_surface, text_rect.topleft)
 
+def get_outcome(human_turn, time_end, state): 
+    # Time ran out 
+    if time_end: 
+        return "LOST", "time." 
+    
+    # Check whether human lost or won 
+    if not human_turn: 
+        if state.checkmate: 
+            return "LOST", "checkmate." 
+    else: 
+        if state.checkmate: 
+            return "WON", "checkmate." 
+    
+    # Stalemate is a draw 
+    if state.stalemate: 
+        return "DRAW", "stalemate." 
+    
+    # Last case is a resignation 
+    return "LOST", "resigned." 
 
-def drawEndOfGame(screen, time_left): 
+
+def drawEndOfGame(screen, time_left, human_turn, time_end, state): 
     # Constants
     BOARD_WIDTH = 800
     BOARD_HEIGHT = 800
@@ -66,15 +86,18 @@ def drawEndOfGame(screen, time_left):
     # Calculate the starting y position of the first button
     button_y = window_y + button_margin
 
+    # Outcome of player and reason 
+    outcome, reason = get_outcome(human_turn, time_end, state)
+
     # Draw buttons/text 
 
     # End of game state text 
-    draw_text(screen, 'LOSS', window_x + WINDOW_WIDTH//4, button_y, WINDOW_WIDTH//2, button_height)
+    draw_text(screen, f'{outcome}', window_x + WINDOW_WIDTH//4, button_y, WINDOW_WIDTH//2, button_height)
     # Update button_y for the next button
     button_y += button_height + button_margin
 
     # Cause of loss text  
-    draw_text(screen, 'You lose by time', window_x + WINDOW_WIDTH//4, button_y, WINDOW_WIDTH//2, button_height)
+    draw_text(screen, f'You {outcome.lower()} by {reason}', window_x + WINDOW_WIDTH//4, button_y, WINDOW_WIDTH//2, button_height)
     # Update button_y for the next button
     button_y += button_height + button_margin
 
