@@ -39,22 +39,26 @@ def draw_text(screen, text, x, y, width, height):
 def get_outcome(human_turn, time_end, state): 
     # Time ran out 
     if time_end: 
-        return "LOST", "time." 
+        return "LOST", "lost by time." 
     
     # Check whether human lost or won 
     if not human_turn: 
         if state.checkmate: 
-            return "LOST", "checkmate." 
+            return "LOST", "lost by checkmate." 
     else: 
         if state.checkmate: 
-            return "WON", "checkmate." 
+            return "WON", "won by checkmate." 
     
     # Stalemate is a draw 
     if state.stalemate: 
-        return "DRAW", "stalemate." 
+        return "DREW", "have stalemated." 
     
     # Last case is a resignation 
     return "LOST", "resigned." 
+
+def check_end_of_game(time_end, gameOver, state): 
+    # Return true if any of the variables are true 
+    return time_end or gameOver or state.stalemate or state.checkmate 
 
 
 def drawEndOfGame(screen, time_left, human_turn, time_end, state): 
@@ -97,7 +101,7 @@ def drawEndOfGame(screen, time_left, human_turn, time_end, state):
     button_y += button_height + button_margin
 
     # Cause of loss text  
-    draw_text(screen, f'You {outcome.lower()} by {reason}', window_x + WINDOW_WIDTH//4, button_y, WINDOW_WIDTH//2, button_height)
+    draw_text(screen, f'You {reason}', window_x + WINDOW_WIDTH//4, button_y, WINDOW_WIDTH//2, button_height)
     # Update button_y for the next button
     button_y += button_height + button_margin
 

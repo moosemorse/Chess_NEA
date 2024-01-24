@@ -3,7 +3,7 @@ import ChessEngine
 from DrawGameState import drawGameState
 import ChessAI
 import timer as t
-from endOfGame import drawEndOfGame  
+from endOfGame import drawEndOfGame, check_end_of_game  
 
 # Initalise pygame 
 pygame.init() 
@@ -143,21 +143,9 @@ def main():
         timer.draw(screen, timer_font, 610, 810)  
         time_left = timer.get_total_time() 
 
-        if time_end:
+        if check_end_of_game(time_end, gameOver, state): 
             drawEndOfGame(screen, time_left, humanTurn, time_end, state) 
-            gameOver = True
-            run = False 
-        elif gameOver and not state.checkmate and not state.stalemate:
-            drawEndOfGame(screen, time_left, humanTurn, time_end, state) 
-            gameOver = True
-            run = False 
-        elif state.checkmate:
-            drawEndOfGame(screen, time_left, humanTurn, time_end, state) 
-            gameOver = True
-            run = False 
-        elif state.stalemate:
-            drawEndOfGame(screen, time_left, humanTurn, time_end, state) 
-            gameOver = True
+            gameOver = True 
             run = False 
 
         clock.tick(FPS) 
