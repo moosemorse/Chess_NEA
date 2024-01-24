@@ -3,7 +3,7 @@ import ChessEngine
 from DrawGameState import drawGameState
 import ChessAI
 import timer as t
-from endOfGame import drawEndOfGame, check_end_of_game  
+from endOfGame import drawEndOfGame, check_end_of_game, play_again
 
 # Initalise pygame 
 pygame.init() 
@@ -144,9 +144,14 @@ def main():
         time_left = timer.get_total_time() 
 
         if check_end_of_game(time_end, gameOver, state): 
-            drawEndOfGame(screen, time_left, humanTurn, time_end, state) 
             gameOver = True 
-            run = False 
+            # Action is the result of the user clicking a button 
+            action = drawEndOfGame(screen, time_left, humanTurn, time_end, state) 
+            if action == 'quit': 
+                run = False 
+            if action == 'play_again': 
+                state, validMoves, sqSelected, playerClicks, moveMade, gameOver, humanTurn = play_again(ChessEngine, state)
+            
 
         clock.tick(FPS) 
         pygame.display.flip() 

@@ -60,6 +60,15 @@ def check_end_of_game(time_end, gameOver, state):
     # Return true if any of the variables are true 
     return time_end or gameOver or state.stalemate or state.checkmate 
 
+def play_again(ChessEngine, state): 
+    state = ChessEngine.GameState() 
+    validMoves = state.getValidMoves() 
+    sqSelected =() 
+    playerClicks = [] 
+    moveMade = False 
+    gameOver = False 
+    humanTurn = True 
+
 
 def drawEndOfGame(screen, time_left, human_turn, time_end, state): 
     # Constants
@@ -131,9 +140,10 @@ def drawEndOfGame(screen, time_left, human_turn, time_end, state):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                return 'quit' 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 # Check if the play again button was clicked
                 if play_again_button.collidepoint(event.pos):
-                    print("play again click")
+                    return 'play_again'
 
         pygame.display.flip()
