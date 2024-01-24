@@ -61,6 +61,7 @@ def check_end_of_game(time_end, gameOver, state):
     return time_end or gameOver or state.stalemate or state.checkmate 
 
 def play_again(ChessEngine, state): 
+    # Reset values of variables 
     state = ChessEngine.GameState() 
     validMoves = state.getValidMoves() 
     sqSelected =() 
@@ -68,6 +69,7 @@ def play_again(ChessEngine, state):
     moveMade = False 
     gameOver = False 
     humanTurn = True 
+    return state, validMoves, sqSelected, playerClicks, moveMade, gameOver, humanTurn 
 
 
 def drawEndOfGame(screen, time_left, human_turn, time_end, state): 

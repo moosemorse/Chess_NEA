@@ -152,7 +152,7 @@ def main():
             if action == 'play_again': 
                 state, validMoves, sqSelected, playerClicks, moveMade, gameOver, humanTurn = play_again(ChessEngine, state)
             
-
+            
         clock.tick(FPS) 
         pygame.display.flip() 
 
