@@ -12,6 +12,9 @@ class Timer:
         time_left = self.total_time - ticks_passed
         self.time_left = time_left 
         return max(time_left, 0) 
+    
+    def reset_timer(self): 
+        self.start_ticks = pygame.time.get_ticks() 
 
     def draw(self, screen, font, x, y):
         # Update the time left 

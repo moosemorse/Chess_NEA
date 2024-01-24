@@ -69,7 +69,8 @@ def play_again(ChessEngine, state):
     moveMade = False 
     gameOver = False 
     humanTurn = True 
-    return state, validMoves, sqSelected, playerClicks, moveMade, gameOver, humanTurn 
+    time_end = False
+    return state, validMoves, sqSelected, playerClicks, moveMade, gameOver, humanTurn, time_end
 
 
 def drawEndOfGame(screen, time_left, human_turn, time_end, state): 

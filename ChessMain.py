@@ -150,9 +150,10 @@ def main():
             if action == 'quit': 
                 run = False 
             if action == 'play_again': 
-                state, validMoves, sqSelected, playerClicks, moveMade, gameOver, humanTurn = play_again(ChessEngine, state)
-            
-            
+                # Pass in ChessEngine, gamestate and timer class 
+                state, validMoves, sqSelected, playerClicks, moveMade, gameOver, humanTurn, time_end = play_again(ChessEngine, state)
+                timer.reset_timer() 
+
         clock.tick(FPS) 
         pygame.display.flip() 
 
