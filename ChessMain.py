@@ -2,8 +2,8 @@ import pygame
 import ChessEngine
 from DrawGameState import drawGameState
 import ChessAI
-import timer as t
-from endOfGame import drawEndOfGame, check_end_of_game, play_again
+import Timer as t
+from EndOfGame import drawEndOfGame, check_end_of_game, play_again
 
 # Initalise pygame 
 pygame.init() 
