@@ -20,7 +20,7 @@ SQ_SIZE = 800//8
 FPS = 30 
 IMAGES = {} 
 
-timer = t.Timer(600) 
+timer = t.Timer(300) 
 timer_font = pygame.font.SysFont('Monospace', 26, True, False) 
 
 def loadImages(): 
