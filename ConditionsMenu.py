@@ -1,4 +1,5 @@
 import pygame
+import random 
 
 def draw_buttons(screen, items, object_list, spacing_y, width, font): 
     
@@ -61,12 +62,12 @@ def draw_conditions_menu(screen, width, height):
     spacing_y = spacing_y + 50 
 
     # Create buttons for colour constraints
-    colour_buttons = []
+    side_buttons = []
     # Colour options
-    colours = ['White', 'Black', 'Random']  
+    side = ['White', 'Black', 'Random']  
 
     # Draw time buttons 
-    draw_buttons(screen, colours, colour_buttons, spacing_y, width, font) 
+    draw_buttons(screen, side, side_buttons, spacing_y, width, font) 
 
     # Increase vertical spacing 
     spacing_y = spacing_y + 150 
@@ -131,13 +132,54 @@ def draw_conditions_menu(screen, width, height):
 
     pygame.display.update()
 
-    return time_buttons
+    return side_buttons, time_buttons, difficulty_buttons, confirm_button
 
-def handle_click(event, time_buttons):
-    if event.type == pygame.MOUSEBUTTONDOWN:
-        for button_rect, time in time_buttons:
-            if button_rect.collidepoint(event.pos):
-                # Print the selected time
-                print(time)
-                return time
-    return None
+def handle_click(event, side_buttons, time_buttons, diff_buttons, confirm_button):
+    confirm = False
+    # Options dictionary 
+    options = { 
+        'side': "White", 
+        'time': '60', 
+        'diff': '0' 
+    }
+    # Loop until confirm is True
+    while not confirm:
+        # Get all events from the event queue
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                # Handle the quit event to allow the program to exit
+                pygame.quit()
+                return None
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                # Check if the click is on the confirm button
+                if confirm_button[0][0].collidepoint(event.pos):
+                    confirm = True
+                    break
+                # Otherwise, check the other buttons
+                else:
+                    buttons_dict = {'side': side_buttons, 'time': time_buttons, 'diff': diff_buttons}
+                    for key in buttons_dict:
+                        for button_rect, text in buttons_dict[key]:
+                            if button_rect.collidepoint(event.pos):
+                                # Print the selected option -- debugging code 
+                                print(text)
+
+                                # Change the value corresponding to key in dictionary 
+                                options[key] = text 
+
+                                # Unique case 
+                                # Pick a random colour when user clicks random 
+                                if text == "Random": 
+                                    sides = ["White", "Black"]
+                                    # Store randomly selected side in options 
+                                    options[key] = random.choice(sides) 
+                                if text == "Unlimited": 
+                                    options[key] = -1 
+    
+    # Cast values for compatability with later use 
+    options['side'] = True if "White" else False 
+    options['time'] = int(options['time'])    
+    options['diff'] = options['diff'] - 1                         
+                                    
+    # Return the selected options                                
+    return options 

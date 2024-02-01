@@ -93,8 +93,9 @@ def main():
         # Check if it's human's turn by matching booleans 
         humanTurn = (state.whiteToMove and playerOne) or (not state.whiteToMove and playerTwo)
         # Time ends, game ends 
-        if timer.is_time_up() and not gameOver: 
-            time_end = True 
+        if timer is not None: 
+            if timer.is_time_up() and not gameOver: 
+                time_end = True 
         for event in pygame.event.get(): 
             if event.type == pygame.QUIT: 
                 run = False
@@ -126,8 +127,6 @@ def main():
                         # Check if piece has been moved to another square 
                         if len(playerClicks) == 2: 
                             move = ChessEngine.Move(playerClicks[0], playerClicks[1], state.board)
-                            # Print notation of move (start --> end)
-                            print(move.getNotation())
                             for i in range(len(validMoves)): 
                                 if move == validMoves[i]:  
                                     # Update gamestate by making move 
@@ -150,12 +149,29 @@ def main():
 
         if game_state == GAME_STATE_CONDITIONS_MENU:
             # Draw and interact with the conditions menu
-            time_buttons = ConditionsMenu.draw_conditions_menu(screen, WIDTH, HEIGHT)
-            selected_option = ConditionsMenu.handle_click(event, time_buttons)
-            if selected_option is not None:
-                # Process selected option and update game state
-                game_state = GAME_STATE_PLAYING
-                screen.fill('#ebecd0')
+            # Returns buttons created 
+            side_buttons, time_buttons, diff_buttons, confirm_button = ConditionsMenu.draw_conditions_menu(screen, WIDTH, HEIGHT)
+            # Returns options chosen 
+            selected_options = ConditionsMenu.handle_click(event, side_buttons, time_buttons, diff_buttons, confirm_button)
+
+            # Unpacking dictionary 
+            if selected_options['side'] == False: 
+                # Swap states of playerOne and playerTwo 
+                playerOne = not playerOne
+                playerTwo = not playerTwo 
+
+            # Re-initalise timer with new timer 
+            if selected_options['time'] == -1: 
+                timer = None  
+            else: 
+                timer = t.Timer(selected_options['time']) 
+
+            # Change depth level of AI 
+            ChessAI.change_depth(selected_options['diff'])
+
+            # Update game state 
+            game_state = GAME_STATE_PLAYING
+            screen.fill('#ebecd0')
 
         # AI moves 
         if not humanTurn and not gameOver: 
@@ -173,9 +189,10 @@ def main():
         if game_state == GAME_STATE_PLAYING:
             # Draw the current board 
             drawGameState(screen, state, IMAGES, SQ_SIZE, validMoves, sqSelected, playerOne, moveLogFont) 
-            # Draw timer 
-            timer.draw(screen, timer_font, 610, 810)  
-            time_left = timer.get_total_time() 
+            if timer is not None: 
+                # Draw timer 
+                timer.draw(screen, timer_font, 610, 810)  
+                time_left = timer.get_total_time() 
 
         if check_end_of_game(time_end, gameOver, state): 
             gameOver = True 
@@ -186,7 +203,8 @@ def main():
             if action == 'play_again': 
                 # Pass in ChessEngine, gamestate and timer class 
                 state, validMoves, sqSelected, playerClicks, moveMade, gameOver, humanTurn, time_end = play_again(ChessEngine, state)
-                timer.reset_timer() 
+                if timer is not None: 
+                    timer.reset_timer() 
 
         clock.tick(FPS) 
         pygame.display.flip() 

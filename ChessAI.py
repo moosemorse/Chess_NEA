@@ -68,6 +68,8 @@ STALEMATE = 0
 # Max depth level 
 DEPTH = 0
 
+
+
 def findRandomMove(validMoves): 
     # Generate random index 
     position = random.randint(0, len(validMoves)-1) 
@@ -151,3 +153,10 @@ def makeBestMove(state, validMoves):
     # Call negaMax to find best move 
     negaMaxAlphaBeta(state, validMoves, DEPTH, -CHECKMATE, CHECKMATE, 1 if state.whiteToMove else -1) 
     return nextMove 
+
+def change_depth(diff): 
+    global DEPTH 
+    DEPTH = diff 
+
+    
+
