@@ -177,9 +177,12 @@ def handle_click(event, side_buttons, time_buttons, diff_buttons, confirm_button
                                     options[key] = -1 
     
     # Cast values for compatability with later use 
-    options['side'] = True if "White" else False 
+    if options['side'] == "White": 
+        options['side'] = True 
+    else: 
+        options['side'] = False 
     options['time'] = int(options['time'])    
-    options['diff'] = options['diff'] - 1                         
+    options['diff'] = int(options['diff']) - 1                         
                                     
     # Return the selected options                                
     return options 

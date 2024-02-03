@@ -21,9 +21,6 @@ SQ_SIZE = 800//8
 FPS = 30 
 IMAGES = {} 
 
-timer = t.Timer(300) 
-timer_font = pygame.font.SysFont('Monospace', 26, True, False) 
-
 def loadImages(): 
     # Pass in dictionary to store images 
     pieces = ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R', 'P']
@@ -41,12 +38,16 @@ def loadImages():
 
 def main(): 
     """ 
-    Flags and import initialisations before running while loop 
+    Flags and important initialisations before running while loop 
     """
     # Create screen 
     screen = pygame.display.set_mode((WIDTH, HEIGHT)) 
     clock = pygame.time.Clock()
     screen.fill(pygame.Color("#ebecd0"))
+
+    # Timer 
+    timer = t.Timer(300) 
+    timer_font = pygame.font.SysFont('Monospace', 26, True, False) 
 
     # Define game states
     GAME_STATE_CONDITIONS_MENU = 0
