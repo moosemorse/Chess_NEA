@@ -23,7 +23,8 @@ class Timer:
         minutes = time_left // 60
         seconds = time_left % 60
         # Timer text '00:00' 
-        timer_text = f'{minutes}:{seconds:02d}'
+        timer_text = f'{minutes:02d}:{seconds:02d}'
+
         timer_surface = font.render(timer_text, True, pygame.Color('black')) 
 
         # Calculate the size of the text for the background rectangle

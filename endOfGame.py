@@ -117,10 +117,11 @@ def drawEndOfGame(screen, time_left, human_turn, time_end, state):
     # Update button_y for the next button
     button_y += button_height + button_margin
 
-    # Time left text 
-    draw_text(screen, f'Time left: {time_left}', window_x + WINDOW_WIDTH//4, button_y, WINDOW_WIDTH//2, button_height)
-    # Update button_y for the next button
-    button_y += button_height + button_margin
+    if time_left != None: 
+        # Time left text 
+        draw_text(screen, f'Time left: {time_left}', window_x + WINDOW_WIDTH//4, button_y, WINDOW_WIDTH//2, button_height)
+        # Update button_y for the next button
+        button_y += button_height + button_margin
 
     # Play again button 
     play_again_button = draw_button(screen, 'Play again', window_x + WINDOW_WIDTH//4, button_y, WINDOW_WIDTH//2, button_height)
