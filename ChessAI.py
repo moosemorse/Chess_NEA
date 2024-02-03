@@ -156,7 +156,7 @@ def makeBestMove(state, validMoves):
 
 def change_depth(diff): 
     global DEPTH 
-    DEPTH = diff 
+    DEPTH = diff + 1 
 
     
 

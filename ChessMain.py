@@ -162,13 +162,15 @@ def main():
                 playerTwo = not playerTwo 
 
             # Re-initalise timer with new timer 
-            if selected_options['time'] == -1: 
+            if selected_options['time'] == -60: 
                 timer = None  
+                time_left = None 
             else: 
                 timer = t.Timer(selected_options['time']) 
 
             # Change depth level of AI 
             ChessAI.change_depth(selected_options['diff'])
+
 
             # Update game state 
             game_state = GAME_STATE_PLAYING

@@ -161,9 +161,6 @@ def handle_click(event, side_buttons, time_buttons, diff_buttons, confirm_button
                     for key in buttons_dict:
                         for button_rect, text in buttons_dict[key]:
                             if button_rect.collidepoint(event.pos):
-                                # Print the selected option -- debugging code 
-                                print(text)
-
                                 # Change the value corresponding to key in dictionary 
                                 options[key] = text 
 
@@ -181,7 +178,7 @@ def handle_click(event, side_buttons, time_buttons, diff_buttons, confirm_button
         options['side'] = True 
     else: 
         options['side'] = False 
-    options['time'] = int(options['time'])    
+    options['time'] = int(options['time']) * 60   
     options['diff'] = int(options['diff']) - 1                         
                                     
     # Return the selected options                                
