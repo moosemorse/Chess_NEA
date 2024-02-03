@@ -139,7 +139,7 @@ def handle_click(event, side_buttons, time_buttons, diff_buttons, confirm_button
     # Options dictionary 
     options = { 
         'side': "White", 
-        'time': '60', 
+        'time': '1', 
         'diff': '0' 
     }
     # Loop until confirm is True
