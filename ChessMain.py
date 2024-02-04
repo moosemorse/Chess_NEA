@@ -102,7 +102,7 @@ def main():
                 run = False
             # Mouse handler 
             elif event.type == pygame.MOUSEBUTTONDOWN: 
-                if humanTurn and not gameOver:
+                if humanTurn and not gameOver and game_state == GAME_STATE_PLAYING:
                     # Get location of mouse 
                     location = pygame.mouse.get_pos() 
                     col = location[0]//SQ_SIZE
