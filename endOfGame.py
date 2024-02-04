@@ -51,7 +51,7 @@ def get_outcome(human_turn, time_end, state):
     
     # Stalemate is a draw 
     if state.stalemate: 
-        return "DREW", "have stalemated." 
+        return "DRAW", "have stalemated." 
     
     # Last case is a resignation 
     return "LOST", "resigned." 
