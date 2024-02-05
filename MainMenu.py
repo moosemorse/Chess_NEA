@@ -16,7 +16,6 @@ def draw_buttons(screen, object_text, object_list, width):
 
     for i, text in enumerate(object_text): 
         button_y = (i*200) + button_height + margin 
-        print(button_y) 
         # Draw the button rectangle
         button_rect = pygame.Rect(button_x, button_y, button_width, button_height)
         object_list.append((button_rect, text))
