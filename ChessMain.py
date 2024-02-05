@@ -50,8 +50,9 @@ def main():
     timer_font = pygame.font.SysFont('Monospace', 26, True, False) 
 
     # Define game states
-    GAME_STATE_CONDITIONS_MENU = 0
-    GAME_STATE_PLAYING = 1
+    GAME_STATE_MAIN_MENU = 0 
+    GAME_STATE_CONDITIONS_MENU = 1
+    GAME_STATE_PLAYING = 2
 
     # Set the initial game state
     game_state = GAME_STATE_CONDITIONS_MENU
