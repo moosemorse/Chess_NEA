@@ -57,8 +57,7 @@ def handle_click(main_buttons):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 # Handle the quit event to allow the program to exit
-                pygame.quit()
-                return None
+                return -1
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 # Check if the play button is clicked
                 # Play game has the only functionality at this point! 

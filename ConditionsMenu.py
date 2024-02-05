@@ -150,8 +150,7 @@ def handle_click(side_buttons, time_buttons, diff_buttons, confirm_button):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 # Handle the quit event to allow the program to exit
-                pygame.quit()
-                return None
+                return -1 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 # Check if the click is on the confirm button
                 if confirm_button[0][0].collidepoint(event.pos):

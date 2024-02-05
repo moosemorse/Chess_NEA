@@ -51,6 +51,7 @@ def main():
     timer_font = pygame.font.SysFont('Monospace', 26, True, False) 
 
     # Define game states
+    GAME_STATE_END = -1 
     GAME_STATE_MAIN_MENU = 0 
     GAME_STATE_CONDITIONS_MENU = 1
     GAME_STATE_PLAYING = 2
@@ -208,14 +209,14 @@ def main():
         if check_end_of_game(time_end, gameOver, state): 
             gameOver = True 
             # Action is the result of the user clicking a button 
-            action = drawEndOfGame(screen, time_left, humanTurn, time_end, state) 
-            if action == 'quit': 
-                run = False 
-            if action == 'play_again': 
-                # Pass in ChessEngine, gamestate and timer class 
-                state, validMoves, sqSelected, playerClicks, moveMade, gameOver, humanTurn, time_end = play_again(ChessEngine, state)
-                if timer is not None: 
-                    timer.reset_timer() 
+            game_state = drawEndOfGame(screen, time_left, humanTurn, time_end, state) 
+            state, validMoves, sqSelected, playerClicks, moveMade, gameOver, humanTurn, time_end = play_again(ChessEngine, state)
+            if timer is not None: 
+                timer.reset_timer() 
+        
+        if game_state == GAME_STATE_END: 
+            run = False 
+            
 
         clock.tick(FPS) 
         pygame.display.flip() 
