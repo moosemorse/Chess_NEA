@@ -1,70 +1,49 @@
 import pygame 
 
-def draw_button(screen, text, x, y, width, height):
-    # Draw the button rectangle
-    button_rect = pygame.Rect(x, y, width, height)
-    pygame.draw.rect(screen, (0,65,65), button_rect)
-    
-    # Create font object
-    font = pygame.font.Font(None, 36) 
-    
-    # Render the text
-    text_surface = font.render(text, True, (255,255,255))
-    
-    # Calculate the position for the text
-    text_rect = text_surface.get_rect(center=button_rect.center)
-    
-    # Draw the text over the button
-    screen.blit(text_surface, text_rect.topleft)
-    
-    return button_rect
+def draw_buttons(screen, object_text, object_list, width):
 
-def draw_text(screen, text, x, y, width, height): 
-    # Draw the button rectangle
-    button_rect = pygame.Rect(x, y, width, height)
-    pygame.draw.rect(screen, (15,15,15), button_rect)
-    
-    # Create font object
-    font = pygame.font.Font(None, 36) 
-    
-    # Render the text
-    text_surface = font.render(text, True, (255,255,255))
-    
-    # Calculate the position for the text
-    text_rect = text_surface.get_rect(center=button_rect.center)
-    
-    # Draw the text over the button
-    screen.blit(text_surface, text_rect.topleft)
+    # Button dimensions 
+    button_width = 250 
+    button_height = 250 
+    # Center buttons
+    button_x = width // 2 
+    # Padding from top of window 
+    button_y = 10 
 
+    # Font 
+    font = pygame.font.Font(None, 60) 
 
-def drawEndOfGame(screen, width, height, time_left, human_turn, time_end, state): 
-    # Create the end-of-game window
-    end_game_surface = pygame.Surface((width, height))
+    for i, text in enumerate(object_text): 
+        button_y = (i*50) + button_y 
+        # Draw the button rectangle
+        button_rect = pygame.Rect(button_x, button_y, button_width, button_height)
+        object_list.append((button_rect, text))
+        pygame.draw.rect(screen, (0,65,65), button_rect)
+        # Render the text
+        text_surface = font.render(object_text, True, (255,255,255))
+        # Calculate the position for the text
+        text_rect = text_surface.get_rect(center=button_rect.center)
+        # Draw the text over the button
+        screen.blit(text_surface, text_rect.topleft)
+
+def drawMainMenu(screen, width, height): 
+    # Create the main menu window 
+    main_menu_surface = pygame.Surface((width, height))
     # Grey color for the window background
-    end_game_surface.fill((15, 15, 15)) 
+    main_menu_surface.fill((15, 15, 15)) 
 
     # Draw window background 
-    screen.blit(end_game_surface, (0, 0))
+    screen.blit(main_menu_surface, (0, 0))
 
-    # Window y starting coordinate 
-    window_y = 0 
-    # Height of each button
-    button_height = 40 
-    # Space between buttons
-    button_margin = 20 
+    # Stores button tuples for the main three buttons 
+    main_buttons = [] 
+    # Text drawn onto each button 
+    main_text = ['Play', 'Review', 'Read']
 
-    # Calculate the starting y position of the first button
-    button_y = window_y + button_margin
+    # Draw buttons 
+    draw_buttons(screen, main_text, main_buttons, width) 
 
+    pygame.display.update() 
 
-    # Main window loop
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                # Event handler for clicking buttons 
-                pass 
-        
-        pygame.display.flip() 
+    return main_buttons 
+
