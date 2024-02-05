@@ -164,26 +164,27 @@ def main():
             # Returns options chosen 
             selected_options = ConditionsMenu.handle_click(side_buttons, time_buttons, diff_buttons, confirm_button)
 
-            # Unpacking dictionary 
-            if selected_options['side'] == False: 
-                # Swap states of playerOne and playerTwo 
-                playerOne = not playerOne
-                playerTwo = not playerTwo 
-
-            # Re-initalise timer with new timer 
-            if selected_options['time'] == -60: 
-                timer = None  
-                time_left = None 
+            if selected_options == -1: 
+                game_state = GAME_STATE_END
             else: 
-                timer = t.Timer(selected_options['time']) 
+                # Unpacking dictionary 
+                if selected_options['side'] == False: 
+                    # Swap states of playerOne and playerTwo 
+                    playerOne = not playerOne
+                    playerTwo = not playerTwo 
 
-            # Change depth level of AI 
-            ChessAI.change_depth(selected_options['diff'])
+                # Re-initalise timer with new timer 
+                if selected_options['time'] == -60: 
+                    timer = None  
+                    time_left = None 
+                else: 
+                    timer = t.Timer(selected_options['time']) 
 
-
-            # Update game state 
-            game_state = GAME_STATE_PLAYING
-            screen.fill('#ebecd0')
+                # Change depth level of AI 
+                ChessAI.change_depth(selected_options['diff'])
+                # Update game state 
+                game_state = GAME_STATE_PLAYING
+                screen.fill('#ebecd0')
 
         # AI moves 
         if not humanTurn and not gameOver: 
