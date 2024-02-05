@@ -42,7 +42,7 @@ def draw_heading(screen, text, width, spacing_y):
     screen.blit(text_surface, text_rect) 
 
 
-def draw_conditions_menu(screen, width, height):
+def draw_conditions_menu(screen, width):
     # Set dark background
     screen.fill((15, 15, 15)) 
 
@@ -180,6 +180,6 @@ def handle_click(event, side_buttons, time_buttons, diff_buttons, confirm_button
         options['side'] = False 
     options['time'] = int(options['time']) * 60   
     options['diff'] = int(options['diff']) - 1                         
-                                    
+                                        
     # Return the selected options                                
     return options 
