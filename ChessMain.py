@@ -4,7 +4,8 @@ from DrawGameState import drawGameState
 import ChessAI
 import Timer as t
 from EndOfGame import drawEndOfGame, check_end_of_game, play_again
-import ConditionsMenu 
+import ConditionsMenu
+import MainMenu 
 
 # Initalise pygame 
 pygame.init() 
@@ -55,7 +56,7 @@ def main():
     GAME_STATE_PLAYING = 2
 
     # Set the initial game state
-    game_state = GAME_STATE_CONDITIONS_MENU
+    game_state = GAME_STATE_MAIN_MENU
 
     # Move Log Font field  
     moveLogFont = pygame.font.SysFont('Arial', 15, True, False) 
@@ -148,13 +149,19 @@ def main():
                             state.undoMove() 
                             moveMade = True  
 
+        if game_state == GAME_STATE_MAIN_MENU: 
+            # Draw and return main menu buttons 
+            main_menu_buttons = MainMenu.drawMainMenu(screen, WIDTH, HEIGHT)
+            # Handle user clicking which button 
+            game_state = MainMenu.handle_click(main_menu_buttons) 
+
 
         if game_state == GAME_STATE_CONDITIONS_MENU:
             # Draw and interact with the conditions menu
             # Returns buttons created 
-            side_buttons, time_buttons, diff_buttons, confirm_button = ConditionsMenu.draw_conditions_menu(screen, WIDTH, HEIGHT)
+            side_buttons, time_buttons, diff_buttons, confirm_button = ConditionsMenu.draw_conditions_menu(screen, WIDTH)
             # Returns options chosen 
-            selected_options = ConditionsMenu.handle_click(event, side_buttons, time_buttons, diff_buttons, confirm_button)
+            selected_options = ConditionsMenu.handle_click(side_buttons, time_buttons, diff_buttons, confirm_button)
 
             # Unpacking dictionary 
             if selected_options['side'] == False: 

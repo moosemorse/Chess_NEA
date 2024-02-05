@@ -1,6 +1,8 @@
 import pygame
 import random 
 
+pygame.init() 
+
 def draw_buttons(screen, items, object_list, spacing_y, width, font): 
     
     # Calculate positions for buttons
@@ -134,7 +136,7 @@ def draw_conditions_menu(screen, width):
 
     return side_buttons, time_buttons, difficulty_buttons, confirm_button
 
-def handle_click(event, side_buttons, time_buttons, diff_buttons, confirm_button):
+def handle_click(side_buttons, time_buttons, diff_buttons, confirm_button):
     confirm = False
     # Options dictionary 
     options = { 
