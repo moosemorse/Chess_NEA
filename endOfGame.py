@@ -144,10 +144,14 @@ def drawEndOfGame(screen, time_left, human_turn, time_end, state):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-                return 'quit' 
+                return -1 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 # Check if the play again button was clicked
                 if play_again_button.collidepoint(event.pos):
-                    return 'play_again'
-
+                    # Value of GAME_STATE_PLAYING 
+                    return 2 
+                if main_menu_button.collidepoint(event.pos): 
+                    # Value of GAME_STATE_MAIN_MENU
+                    return 0 
+                
         pygame.display.flip()
