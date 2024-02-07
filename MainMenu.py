@@ -39,7 +39,7 @@ def drawMainMenu(screen, width, height):
     # Stores button tuples for the main three buttons 
     main_buttons = [] 
     # Text drawn onto each button 
-    main_text = ['Play', 'Review', 'Read']
+    main_text = ['Play', 'Review', 'Rules']
 
     # Draw buttons 
     draw_buttons(screen, main_text, main_buttons, width) 
