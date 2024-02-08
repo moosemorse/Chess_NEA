@@ -71,16 +71,8 @@ def handle_click(promotion_buttons):
                 # Handle the quit event to allow the program to exit
                 exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                # Check if the rook button is pressed 
-                if promotion_buttons[0][0].collidepoint(event.pos):
-                    return promotion_buttons[0][1] 
-                # Check if the knight button is pressed 
-                if promotion_buttons[1][0].collidepoint(event.pos): 
-                    return promotion_buttons[0][1]
-                # Check if the bishop button is pressed 
-                if promotion_buttons[2][0].collidepoint(event.pos): 
-                    return promotion_buttons[2][1]
-                # Check if the queen button is pressed 
-                if promotion_buttons[3][0].collidepoint(event.pos): 
-                    return promotion_buttons[3][1]
+                # Iterate through all buttons to check if user clicks on them  
+                for i in range(len(promotion_buttons)): 
+                    if promotion_buttons[i][0].collidepoint(event.pos): 
+                        return promotion_buttons[i][1] 
                 
