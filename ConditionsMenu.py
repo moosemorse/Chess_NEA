@@ -3,7 +3,7 @@ import random
 
 pygame.init() 
 
-def draw_buttons(screen, items, object_list, spacing_y, width, font): 
+def draw_buttons(screen, items, object_list, spacing_y, width, font, selected): 
     
     # Calculate positions for buttons
     spacing_x = width // (len(items) + 1)
@@ -20,7 +20,10 @@ def draw_buttons(screen, items, object_list, spacing_y, width, font):
         button_rect = pygame.Rect(x, y, button_width, button_height)
         object_list.append((button_rect, text))
         # Draw button rectangle
-        pygame.draw.rect(screen, ('#004241'), button_rect)
+        if text == selected: 
+            pygame.draw.rect(screen, ('#00422D'), button_rect)
+        else: 
+            pygame.draw.rect(screen, ('#004241'), button_rect)
         # Text drawn onto rectangle 
         text_surface = font.render(text, True, (255, 255, 255)) 
         # Center text 
@@ -69,7 +72,7 @@ def draw_conditions_menu(screen, width):
     side = ['White', 'Black', 'Random']  
 
     # Draw time buttons 
-    draw_buttons(screen, side, side_buttons, spacing_y, width, font) 
+    draw_buttons(screen, side, side_buttons, spacing_y, width, font, side[0]) 
 
     # Increase vertical spacing 
     spacing_y = spacing_y + 150 
@@ -89,7 +92,7 @@ def draw_conditions_menu(screen, width):
     times = ['1', '5', '10', '15', 'Unlimited']  
 
     # Draw time buttons 
-    draw_buttons(screen, times, time_buttons, spacing_y, width, font) 
+    draw_buttons(screen, times, time_buttons, spacing_y, width, font, times[0]) 
 
     # Increase vertical spacing 
     spacing_y = spacing_y + 150 
@@ -110,7 +113,7 @@ def draw_conditions_menu(screen, width):
     difficulty = ['1', '2', '3']
 
     # Draw difficulty buttons 
-    draw_buttons(screen, difficulty, difficulty_buttons, spacing_y, width, font) 
+    draw_buttons(screen, difficulty, difficulty_buttons, spacing_y, width, font, difficulty[0]) 
 
     # Increase vertical spacing 
     spacing_y = spacing_y + 150 
@@ -127,7 +130,7 @@ def draw_conditions_menu(screen, width):
     confirm = ['Confirm?']   
 
     # Draw confirm button 
-    draw_buttons(screen, confirm, confirm_button, spacing_y, width, font) 
+    draw_buttons(screen, confirm, confirm_button, spacing_y, width, font, None) 
 
     # Increase vertical spacing 
     spacing_y = spacing_y + 100 
