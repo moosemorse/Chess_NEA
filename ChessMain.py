@@ -134,7 +134,7 @@ def main():
                             for i in range(len(validMoves)): 
                                 if move == validMoves[i]:  
                                     # Update gamestate by making move 
-                                    state.makeMove(validMoves[i]) 
+                                    state.makeMove(screen, validMoves[i]) 
                                     moveMade = True 
                                     # Reset user clicks if valid move 
                                     sqSelected = () 
@@ -188,10 +188,10 @@ def main():
 
         # AI moves 
         if not humanTurn and not gameOver: 
-            AIMove = ChessAI.makeBestMove(state, validMoves) 
+            AIMove = ChessAI.makeBestMove(screen, state, validMoves) 
             if AIMove is None: 
                 AIMove = ChessAI.findRandomMove(validMoves) 
-            state.makeMove(AIMove, AI = True) 
+            state.makeMove(screen, AIMove, AI = True) 
             moveMade = True 
         
 

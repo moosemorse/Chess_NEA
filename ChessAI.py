@@ -118,7 +118,7 @@ def scoreBoard(state):
     evalScore = scorePosition(state.board) + scoreMaterial(state.board) 
     return evalScore 
 
-def negaMaxAlphaBeta(state, validMoves, depth, alpha, beta, turnMultiplier): 
+def negaMaxAlphaBeta(screen, state, validMoves, depth, alpha, beta, turnMultiplier): 
     global nextMove 
     # Heuristic value 
     if depth == 0: 
@@ -128,7 +128,7 @@ def negaMaxAlphaBeta(state, validMoves, depth, alpha, beta, turnMultiplier):
     maxScore = -CHECKMATE 
     # Iterate through all possible moves 
     for move in validMoves: 
-        state.makeMove(move)
+        state.makeMove(screen, move)
         nextMoves = state.getValidMoves() 
         # Recursively call negaMax from perspective of other player 
         score = -negaMaxAlphaBeta(state, nextMoves, depth-1, -beta, -alpha, -turnMultiplier) 
@@ -144,14 +144,14 @@ def negaMaxAlphaBeta(state, validMoves, depth, alpha, beta, turnMultiplier):
             break
     return maxScore 
 
-def makeBestMove(state, validMoves): 
+def makeBestMove(screen, state, validMoves): 
     # Move to be played 
     global nextMove 
     nextMove = None 
     # Move ordering 
     random.shuffle(validMoves) 
     # Call negaMax to find best move 
-    negaMaxAlphaBeta(state, validMoves, DEPTH, -CHECKMATE, CHECKMATE, 1 if state.whiteToMove else -1) 
+    negaMaxAlphaBeta(screen, state, validMoves, DEPTH, -CHECKMATE, CHECKMATE, 1 if state.whiteToMove else -1) 
     return nextMove 
 
 def change_depth(diff): 

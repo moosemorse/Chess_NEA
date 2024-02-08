@@ -22,7 +22,7 @@ def draw_buttons(screen, player_is_white, object_list, width):
     button_height = 90 
     # Center buttons 
     button_x = width//2 - button_width//2 
-    margin = 10 
+    margin = 100 
 
     # Load white images if user is playing from white perspective 
     # Else load the black pieces since the user is playing from black's perspective 
@@ -33,7 +33,7 @@ def draw_buttons(screen, player_is_white, object_list, width):
         pieces = ['R', 'N', 'B', 'Q'] 
 
     for i, piece in enumerate(pieces): 
-        button_y = (i*50) + button_height + margin 
+        button_y = (i*100) + button_height + margin 
         # Draw the button rectangle 
         button_rect = pygame.Rect(button_x, button_y, button_width, button_height) 
         # Append button object and piece name to object_list 
@@ -41,12 +41,9 @@ def draw_buttons(screen, player_is_white, object_list, width):
         # Draw border behind image 
         pygame.draw.rect(screen, (0,15,15), button_rect) 
         # Draw image in center of button 
-        screen.blit(PROMOTION_IMAGES[piece], button_rect.center)
+        screen.blit(PROMOTION_IMAGES[piece], button_rect.topleft)
 
-def drawPromotionMenu(player_is_white): 
-    
-    # Get screen to draw buttons onto 
-    screen = pygame.display.set_mode((1000, 900)) 
+def drawPromotionMenu(screen, player_is_white): 
 
     # Load images
     loadImages()

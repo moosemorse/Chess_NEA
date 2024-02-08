@@ -1,4 +1,7 @@
 import PromotionMenu
+import pygame 
+
+pygame.init() 
 
 class GameState(): 
     def __init__(self): 
@@ -32,7 +35,7 @@ class GameState():
                                              self.currentCastlingRights.wqs, self.currentCastlingRights.bqs)] 
         
     
-    def makeMove(self, move, AI = False): 
+    def makeMove(self, screen, move, AI = False): 
         # Check if square is empty 
         if self.board[move.startRow][move.startCol] != "-": 
             # Position of piece moved will be empty 
@@ -52,7 +55,7 @@ class GameState():
 
             # Pawn promotion 
             if move.isPawnPromotion and not AI:
-                promotion_buttons = PromotionMenu.drawPromotionMenu(not self.whiteToMove)
+                promotion_buttons = PromotionMenu.drawPromotionMenu(screen, not self.whiteToMove)
                 promotedPiece = PromotionMenu.handle_click(promotion_buttons) 
                 self.board[move.endRow][move.endCol] = promotedPiece
                 
