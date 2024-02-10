@@ -131,7 +131,7 @@ def negaMaxAlphaBeta(screen, state, validMoves, depth, alpha, beta, turnMultipli
         state.makeMove(screen, move)
         nextMoves = state.getValidMoves() 
         # Recursively call negaMax from perspective of other player 
-        score = -negaMaxAlphaBeta(state, nextMoves, depth-1, -beta, -alpha, -turnMultiplier) 
+        score = -negaMaxAlphaBeta(screen, state, nextMoves, depth-1, -beta, -alpha, -turnMultiplier) 
         if score > maxScore: 
             maxScore = score 
             if depth == DEPTH: 
