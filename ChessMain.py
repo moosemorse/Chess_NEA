@@ -160,9 +160,14 @@ def main():
         if game_state == GAME_STATE_CONDITIONS_MENU:
             # Draw and interact with the conditions menu
             # Returns buttons created 
-            side_buttons, time_buttons, diff_buttons, confirm_button = ConditionsMenu.draw_conditions_menu(screen, WIDTH)
+            options = { 
+                'side': "White", 
+                'time': '1', 
+                'diff': '1' 
+            }
+            side_buttons, time_buttons, diff_buttons, confirm_button = ConditionsMenu.draw_conditions_menu(screen, WIDTH, options)
             # Returns options chosen 
-            selected_options = ConditionsMenu.handle_click(side_buttons, time_buttons, diff_buttons, confirm_button)
+            selected_options = ConditionsMenu.handle_click(screen, WIDTH, side_buttons, time_buttons, diff_buttons, confirm_button)
 
             if selected_options == -1: 
                 game_state = GAME_STATE_END
@@ -180,6 +185,7 @@ def main():
                 else: 
                     timer = t.Timer(selected_options['time']) 
 
+                print(selected_options['diff'])
                 # Change depth level of AI 
                 ChessAI.change_depth(selected_options['diff'])
                 # Update game state 

@@ -47,7 +47,7 @@ def draw_heading(screen, text, width, spacing_y):
     screen.blit(text_surface, text_rect) 
 
 
-def draw_conditions_menu(screen, width):
+def draw_conditions_menu(screen, width, options):
     # Set dark background
     screen.fill((15, 15, 15)) 
 
@@ -72,7 +72,7 @@ def draw_conditions_menu(screen, width):
     side = ['White', 'Black', 'Random']  
 
     # Draw time buttons 
-    draw_buttons(screen, side, side_buttons, spacing_y, width, font, side[0]) 
+    draw_buttons(screen, side, side_buttons, spacing_y, width, font, options['side']) 
 
     # Increase vertical spacing 
     spacing_y = spacing_y + 150 
@@ -92,7 +92,7 @@ def draw_conditions_menu(screen, width):
     times = ['1', '5', '10', '15', 'Unlimited']  
 
     # Draw time buttons 
-    draw_buttons(screen, times, time_buttons, spacing_y, width, font, times[0]) 
+    draw_buttons(screen, times, time_buttons, spacing_y, width, font, options['time']) 
 
     # Increase vertical spacing 
     spacing_y = spacing_y + 150 
@@ -113,7 +113,7 @@ def draw_conditions_menu(screen, width):
     difficulty = ['1', '2', '3']
 
     # Draw difficulty buttons 
-    draw_buttons(screen, difficulty, difficulty_buttons, spacing_y, width, font, difficulty[0]) 
+    draw_buttons(screen, difficulty, difficulty_buttons, spacing_y, width, font, options['diff']) 
 
     # Increase vertical spacing 
     spacing_y = spacing_y + 150 
@@ -139,13 +139,13 @@ def draw_conditions_menu(screen, width):
 
     return side_buttons, time_buttons, difficulty_buttons, confirm_button
 
-def handle_click(side_buttons, time_buttons, diff_buttons, confirm_button):
+def handle_click(screen, width, side_buttons, time_buttons, diff_buttons, confirm_button):
     confirm = False
     # Options dictionary 
     options = { 
         'side': "White", 
         'time': '1', 
-        'diff': '0' 
+        'diff': '1' 
     }
     # Loop until confirm is True
     while not confirm:
@@ -167,7 +167,7 @@ def handle_click(side_buttons, time_buttons, diff_buttons, confirm_button):
                             if button_rect.collidepoint(event.pos):
                                 # Change the value corresponding to key in dictionary 
                                 options[key] = text 
-
+                                draw_conditions_menu(screen, width, options)
                                 # Unique case 
                                 # Pick a random colour when user clicks random 
                                 if text == "Random": 
