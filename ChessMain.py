@@ -174,9 +174,13 @@ def main():
             else: 
                 # Unpacking dictionary 
                 if selected_options['side'] == False: 
-                    # Swap states of playerOne and playerTwo 
-                    playerOne = not playerOne
-                    playerTwo = not playerTwo 
+                    # Set white to False and black to True 
+                    playerOne = False 
+                    playerTwo = True 
+                else: 
+                    # Otherwise, user is playing from white so set variables to opposite states 
+                    playerOne = True 
+                    playerTwo = False 
 
                 # Re-initalise timer with new timer 
                 if selected_options['time'] == -60: 
@@ -184,8 +188,7 @@ def main():
                     time_left = None 
                 else: 
                     timer = t.Timer(selected_options['time']) 
-
-                print(selected_options['diff'])
+                    
                 # Change depth level of AI 
                 ChessAI.change_depth(selected_options['diff'])
                 # Update game state 
