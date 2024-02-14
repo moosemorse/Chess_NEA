@@ -11,7 +11,7 @@ class UserManager:
         
         conn = None
         try:
-            conn = sqlite3.connect(self.db_file)
+            conn = sqlite3.connect(self.db_path)
             return conn
         except sqlite3.Error as e:
             print(e)
@@ -48,6 +48,8 @@ class UserManager:
             cursor = self.conn.cursor()
             cursor.execute(user_table_sql)
             cursor.execute(games_table_sql)
+            # Commit all changes to the database 
+            self.conn.commit() 
         except sqlite3.Error as e:
             print(e)
 
@@ -62,19 +64,28 @@ class UserManager:
     def close_connection(self):
         self.conn.close()
 
+    def check_tables(self): 
+        cursor = self.conn.cursor() 
+        # Retrieve list of all tables in database 
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tables = cursor.fetchall()
+        # Print the list of tables
+        for table in tables:
+            print(table)
+
 
 if __name__ == '__main__':
 
-    manager = UserManager('chess_app.db')
-
     database = "chess_app.db"
+
+    manager = UserManager(database)
 
     # Create tables if no connection found 
     if manager.conn is not None:
-        manager.create_tables(manager.conn)
+        manager.create_tables()
     else:
         print("Error - couldn't create tables/connection to database")
-
+        
     # End connection to save resources 
     manager.close_connection()
 
