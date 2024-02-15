@@ -1,9 +1,11 @@
 import sqlite3 
+import bcrypt 
 
 class UserManager:
     def __init__(self, db_path):
         self.db_path = db_path
         self.conn = self.create_connection()
+        self.cursor = self.conn.cursor()
 
     def create_connection(self):
        
@@ -44,22 +46,42 @@ class UserManager:
         """
 
         # Execute the SQL statements to create tables
-        try:
-            cursor = self.conn.cursor()
-            cursor.execute(user_table_sql)
-            cursor.execute(games_table_sql)
+        try: 
+            self.cursor.execute(user_table_sql)
+            self.cursor.execute(games_table_sql)
             # Commit all changes to the database 
             self.conn.commit() 
         except sqlite3.Error as e:
             print(e)
 
-    def create_user(self, username, password):
-        # Add user creation logic here
-        pass 
+    def hash_password(self, password): 
+        # Hash a password 
+        salt = bcrypt.gensalt() 
+        return bcrypt.hashpw(password.encode('utf-8'), salt) 
+    
+    def verify_password(self, stored_password, provided_password):
+        # Check password input with stored password in database 
+        return bcrypt.checkpw(provided_password.encode('utf-8'), stored_password)
 
-    def verify_user(self, username, password):
-        # Add user verification logic here
-        pass
+    def create_user(self, username, password):
+        try:
+            hashed_password = self.hash_password(password)
+            # Create new row with username and their hashed password in table users 
+            self.cursor.execute('INSERT INTO UserAccounts (Name, Password) VALUES (?, ?)', (username, hashed_password))
+            self.conn.commit()
+            return True
+        except sqlite3.IntegrityError:
+            # Integrity error means that user is already on database, so return False 
+            return False 
+        
+    def login(self, username, password):
+        # Obtain password from database 
+        self.cursor.execute('SELECT Password FROM UserAccounts WHERE Name=?', (username,))
+        result = self.cursor.fetchone()
+        if result and self.verify_password(result[0], password):
+            return True
+        # Passwords didn't match or user account not found 
+        return False 
 
     def close_connection(self):
         self.conn.close()
@@ -79,13 +101,7 @@ if __name__ == '__main__':
     database = "chess_app.db"
 
     manager = UserManager(database)
-
-    # Create tables if no connection found 
-    if manager.conn is not None:
-        manager.create_tables()
-    else:
-        print("Error - couldn't create tables/connection to database")
-        
+         
     # End connection to save resources 
     manager.close_connection()
 
