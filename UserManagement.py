@@ -108,7 +108,7 @@ class UserManager:
     def get_game(self, gameID):
 
         # Retrieve the serialised moves from the database
-        self.cursor.execute('SELECT moves FROM games WHERE game_id=?', (gameID,))
+        self.cursor.execute('SELECT moves FROM games WHERE GameID=?', (gameID,))
         row = self.cursor.fetchone()
         # Data stored in tuple, so access it as a tuple 
         serialised_moves = row[0]
@@ -117,6 +117,14 @@ class UserManager:
         moves = pickle.loads(serialised_moves) 
 
         return moves 
+    
+    def get_all_games(self): 
+        
+        # Grab all records from Games table
+        self.cursor.execute('SELECT * FROM Games')
+        all_rows = self.cursor.fetchall()
+        
+        return all_rows 
 
     def close_connection(self):
         self.conn.close()
