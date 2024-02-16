@@ -1,5 +1,6 @@
 import sqlite3 
 import bcrypt 
+import pickle 
 
 class UserManager:
     def __init__(self, db_path):
@@ -40,7 +41,9 @@ class UserManager:
             UserName VARCHAR(100) NOT NULL,
             DatePlayed DATE NOT NULL,
             TimePlayed TIME NOT NULL,
-            GamePlayed VARCHAR(500) NOT NULL,
+            GamePlayed BLOB NOT NULL,
+            outcome VARCHAR(50) NOT NULL, 
+            result VARCHAR(50) NOT NULL, 
             FOREIGN KEY (UserName) REFERENCES UserAccounts(Name)
         );
         """
@@ -101,6 +104,19 @@ class UserManager:
         except sqlite3.Error as e:
             print(e)
             return False
+        
+    def get_game(self, gameID):
+
+        # Retrieve the serialised moves from the database
+        self.cursor.execute('SELECT moves FROM games WHERE game_id=?', (gameID,))
+        row = self.cursor.fetchone()
+        # Data stored in tuple, so access it as a tuple 
+        serialised_moves = row[0]
+
+        # Deserialise the moves
+        moves = pickle.loads(serialised_moves) 
+
+        return moves 
 
     def close_connection(self):
         self.conn.close()
@@ -114,12 +130,30 @@ class UserManager:
         for table in tables:
             print(table)
 
+    def check_table_headings(self): 
+        # Retrieve list of all tables in the database
+        self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tables = self.cursor.fetchall()
+
+        # Loop through all tables
+        for table_name in tables:
+            print(f"Columns for {table_name[0]}:")
+    
+            # Retrieve column information for each table
+            self.cursor.execute(f"PRAGMA table_info({table_name[0]});")
+            columns = self.cursor.fetchall()
+    
+            # Loop through all columns and print the name
+            for column in columns:
+                print(column[1])  # column[1] is the column name
 
 if __name__ == '__main__':
 
     database = "chess_app.db"
 
     manager = UserManager(database)
+
+    manager.check_table_headings() 
          
     # End connection to save resources 
     manager.close_connection()

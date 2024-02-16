@@ -602,36 +602,6 @@ class GameState():
                     checks.append((endRow, endCol, k[0], k[1]))    
         return inCheck, pins, checks 
     
-    def get_pgn_notation(self, move):
-        # Determine the piece type (P, N, B, R, Q, or K)
-        piece_type = 'P' if move.pieceMoved[1].lower() == 'p' else move.pieceMoved[1].upper()
-        # Determine the starting and ending coordinates in algebraic notation
-        start_square = self.colsToFiles[move.startCol] + self.rowsToRanks[move.startRow]
-        end_square = self.colsToFiles[move.endCol] + self.rowsToRanks[move.endRow]
-        # Determine if the move is a capture
-        is_capture = move.pieceCaptured != '--'
-        capture_str = 'x' if is_capture else ''
-        # Combine the information into a PGN formatted string
-        pgn_notation = f"{piece_type if piece_type != 'P' else ''}{capture_str}{end_square}"
-
-        # Add additional PGN rules for check, checkmate, promotion, etc.
-        # ...
-
-        return pgn_notation
-    
-    def convert_moves_to_pgn(self):
-        # Initialize an empty PGN string
-        pgn_string = ""
-
-        # Iterate through the move log and convert each move to PGN notation
-        for move in self.moveLog:
-            # Get the PGN notation for the current move
-            pgn_notation = self.get_pgn_notation(move)
-            # Append the PGN notation to the PGN string with a space
-            pgn_string += pgn_notation + " "
-
-        # Return the complete PGN string
-        return pgn_string.strip() 
     
 class CastleRights(): 
     
@@ -671,8 +641,6 @@ class Move():
             self.pieceCaptured = 'P' if self.pieceMoved.islower() else 'p'
         # Castle move 
         self.isCastleMove = isCastleMove 
-
-
     
     # Overriding the equals method 
     # Compare one object with another 

@@ -8,6 +8,7 @@ import ConditionsMenu
 import MainMenu 
 import UserManagement 
 from datetime import datetime 
+import pickle 
 
 # Initalise pygame 
 pygame.init() 
@@ -234,7 +235,10 @@ def main():
         if check_end_of_game(time_end, gameOver, state): 
 
             gameOver = True 
-    
+
+            # Serialise moves made (objects) 
+            game_played = pickle.dumps(state.moveLog)
+            
             outcome, result = get_outcome(humanTurn, time_end, state)
             date_played, time_played = get_date_and_time() 
 
@@ -242,7 +246,7 @@ def main():
                 'username': username,
                 'date': date_played, 
                 'time': time_played, 
-                'pgn': state.moveLog, 
+                'pgn': game_played, 
                 'outcome': outcome, 
                 'result': result
             }
