@@ -3,9 +3,11 @@ import ChessEngine
 from DrawGameState import drawGameState
 import ChessAI
 import Timer as t
-from EndOfGame import drawEndOfGame, check_end_of_game, play_again
+from EndOfGame import drawEndOfGame, check_end_of_game, play_again, get_outcome
 import ConditionsMenu
 import MainMenu 
+import UserManagement 
+from datetime import datetime 
 
 # Initalise pygame 
 pygame.init() 
@@ -55,6 +57,11 @@ def main():
     GAME_STATE_MAIN_MENU = 0 
     GAME_STATE_CONDITIONS_MENU = 1
     GAME_STATE_PLAYING = 2
+    GAME_STATE_SAVE_GAME = 3 
+    GAME_STATE_REVIEW_GAME = 4 
+
+    # None - user is a guest 
+    username = None 
 
     # Set the initial game state
     game_state = GAME_STATE_MAIN_MENU
@@ -64,6 +71,14 @@ def main():
 
     # Import game state from ChessEngine file 
     state = ChessEngine.GameState() 
+
+    # Create user manager 
+
+    database = "chess_app.db"
+
+    manager = UserManagement.UserManager(database)
+
+    game_saved = False 
 
     # Store a list of valid moves 
     validMoves = state.getValidMoves() 
@@ -217,9 +232,30 @@ def main():
                 time_left = timer.get_total_time() 
 
         if check_end_of_game(time_end, gameOver, state): 
+
             gameOver = True 
+    
+            outcome, result = get_outcome(humanTurn, time_end, state)
+            date_played, time_played = get_date_and_time() 
+
+            history = { 
+                'username': username,
+                'date': date_played, 
+                'time': time_played, 
+                'pgn': state.moveLog, 
+                'outcome': outcome, 
+                'result': result
+            }
+
             # Action is the result of the user clicking a button 
             game_state = drawEndOfGame(screen, time_left, humanTurn, time_end, state) 
+
+            # Save game button pressed 
+            if game_state == GAME_STATE_SAVE_GAME and username is not None and game_saved == False: 
+                game_saved = manager.save_game(history)
+                game_state = drawEndOfGame(screen, time_left, humanTurn, time_end, state)
+            
+            # Reset all attributes 
             state, validMoves, sqSelected, playerClicks, moveMade, gameOver, humanTurn, time_end = play_again(ChessEngine, state)
             if timer is not None: 
                 timer.reset_timer() 
@@ -240,6 +276,21 @@ def drawText(screen, text):
     textLocation = pygame.Rect(0,0, WIDTH, HEIGHT).move(WIDTH/2 - textObject.get_width()/2, HEIGHT/2 - textObject.get_height()/2)
     # Draw object 
     screen.blit(textObject, textLocation) 
+
+def get_date_and_time(): 
+    
+    # Get the current date and time
+    current_datetime = datetime.now()
+
+    # Separate the date and time
+    current_date = current_datetime.date()  
+    current_time = current_datetime.time()
+
+    # Format the date and time in the format expected by the database
+    formatted_date = current_date.strftime('%Y-%m-%d')  
+    formatted_time = current_time.strftime('%H:%M:%S') 
+
+    return formatted_date, formatted_time
 
 if __name__ == "__main__": 
     main()

@@ -82,6 +82,25 @@ class UserManager:
             return True
         # Passwords didn't match or user account not found 
         return False 
+    
+    def save_game(self, history): 
+        
+        # SQL statement for inserting a new game record
+        insert_game_sql = '''
+        INSERT INTO Games (UserName, DatePlayed, TimePlayed, GamePlayed, outcome, result)
+        VALUES (?, ?, ?, ?, ?, ?)
+        '''
+
+        # Execute the SQL statement
+        try:
+            self.cursor.execute(insert_game_sql, (history['username'], history['date'], history['time'], history['pgn'], 
+                                                  history['outcome'], history['reason']))
+            self.conn.commit()
+            return True
+        # Prevent program crashing 
+        except sqlite3.Error as e:
+            print(e)
+            return False
 
     def close_connection(self):
         self.conn.close()
