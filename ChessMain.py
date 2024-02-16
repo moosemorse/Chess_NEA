@@ -253,7 +253,8 @@ def main():
             # Save game button pressed 
             if game_state == GAME_STATE_SAVE_GAME and username is not None and game_saved == False: 
                 game_saved = manager.save_game(history)
-                game_state = drawEndOfGame(screen, time_left, humanTurn, time_end, state)
+                while game_state == GAME_STATE_SAVE_GAME: 
+                    game_state = drawEndOfGame(screen, time_left, humanTurn, time_end, state)
             
             # Reset all attributes 
             state, validMoves, sqSelected, playerClicks, moveMade, gameOver, humanTurn, time_end = play_again(ChessEngine, state)
