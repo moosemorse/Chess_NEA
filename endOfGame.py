@@ -153,5 +153,8 @@ def drawEndOfGame(screen, time_left, human_turn, time_end, state):
                 if main_menu_button.collidepoint(event.pos): 
                     # Value of GAME_STATE_MAIN_MENU
                     return 0 
+                if save_game_button.collidepoint(event.pos): 
+                    # Value of GAME_STATE_SAVE_GAME 
+                    return 3 
                 
         pygame.display.flip()
