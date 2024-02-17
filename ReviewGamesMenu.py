@@ -128,3 +128,67 @@ def draw_move_buttons(screen, button_list, font):
         # Center text 
         text_rect = text_surface.get_rect(center = button_rect.center)
         screen.blit(text_surface, text_rect)
+
+def draw_reviewing_buttons(screen): 
+
+    # No screen fill because this is drawn over game (drawGameState) 
+    # Buttons for moving back, moving forward, returning back to main menu 
+    buttons = [] 
+
+    # Set up the font for the button text
+    font = pygame.font.Font(None, 32)
+
+    draw_move_buttons(screen, buttons, font)
+
+    draw_return_button(screen, buttons, font) 
+
+    return buttons 
+
+def handle_click_reviewing(buttons): 
+    
+    # Get all events from the event queue
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            # Handle the quit event to allow the program to exit
+            return -1 
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            # Check if a button (game) has been clicked
+                for button in buttons:
+                    for button_rect, text in button:
+                        if button_rect.collidepoint(event.pos):
+                             if text == "Go back":
+                                 # Return back to main menu so value of GAME_STATE_MAIN_MENU
+                                 return 0 
+                             elif text == "Move forward": 
+                                 return '1'
+                             else:
+                                 return '-1'
+                             
+if __name__ == '__main__': 
+
+    # Initalise pygame 
+    pygame.init() 
+
+    # Screen dimensions
+    HEIGHT = 900  
+    WIDTH = 1000 
+    # Move log display box dimensions
+
+    # Create screen 
+    screen = pygame.display.set_mode((WIDTH, HEIGHT)) 
+    clock = pygame.time.Clock()
+
+    run = True 
+    
+    games = [] 
+
+    while run: 
+
+        for event in pygame.event.get(): 
+            if event.type == pygame.QUIT: 
+                run = False
+            else: 
+                buttons = draw_reviewing_buttons(screen) 
+
+        clock.tick(60) 
+        pygame.display.flip()

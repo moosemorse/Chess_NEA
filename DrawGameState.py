@@ -1,6 +1,6 @@
 import pygame 
 
-def drawGameState(screen, state, images, size, validMoves, sqSelected, white, moveLogFont): 
+def drawGameState(screen, state, images, size, validMoves, sqSelected, white, moveLogFont, review): 
     # Draw squares onto screen 
     drawBoard(screen, size)
     # Highlight squares if needed 
@@ -8,15 +8,16 @@ def drawGameState(screen, state, images, size, validMoves, sqSelected, white, mo
     # Draw pieces ontop of squares 
     drawPieces(screen, state.board, images, size, white) 
     # Draw buttons 
-    drawButtons(screen, images )
+    drawButtons(screen, images, review)
     # Draw Move Log display 
     drawMoveLog(screen, state, moveLogFont)
 
-def drawButtons(screen, images): 
-    # Draw resign flag 
-    screen.blit(images['resign'], pygame.Rect(10, 810, 60, 60))
-    # Draw undo button 
-    screen.blit(images['undo'], pygame.Rect(110, 810, 60, 60))
+def drawButtons(screen, images, review): 
+    if not review: 
+        # Draw resign flag 
+        screen.blit(images['resign'], pygame.Rect(10, 810, 60, 60))
+        # Draw undo button 
+        screen.blit(images['undo'], pygame.Rect(110, 810, 60, 60))
 
 def drawBoard(screen, size): 
     # Light square 

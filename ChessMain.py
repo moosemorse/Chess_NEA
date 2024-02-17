@@ -232,30 +232,49 @@ def main():
             # Reset game_saved variable so user can save game when playing again 
             game_saved = False
             # Draw the current board 
-            drawGameState(screen, state, IMAGES, SQ_SIZE, validMoves, sqSelected, playerOne, moveLogFont) 
+            drawGameState(screen, state, IMAGES, SQ_SIZE, validMoves, sqSelected, playerOne, moveLogFont, False) 
             if timer is not None: 
                 # Draw timer 
                 timer.draw(screen, timer_font, 610, 810)  
                 time_left = timer.get_total_time() 
 
-        if game_state == GAME_STATE_REVIEW_GAME_MENU: 
+        if game_state == GAME_STATE_REVIEW_GAME_MENU and username != None: 
 
             games = manager.get_all_games()
             game_buttons = ReviewGamesMenu.draw_review_games_menu(screen, WIDTH, games)
             game_state = ReviewGamesMenu.handle_click(game_buttons)
             # If the value of game_state is not below, it stores the value of gameID
-            if (game_state != -1) and (game_state != 0): 
+            if (game_state != GAME_STATE_END) and (game_state != GAME_STATE_MAIN_MENU): 
                 gameID = game_state
                 game_state = GAME_STATE_REVIEWING_GAME
 
         if game_state == GAME_STATE_REVIEWING_GAME: 
             # Get clean board
             state = ChessEngine.GameState()
-            game_played = manager.get_game(gameID)
- 
-            drawGameState(screen, state, IMAGES, SQ_SIZE, validMoves, sqSelected, playerOne, moveLogFont)
-            
 
+            # Get the list of move objects 
+            game_played = manager.get_game(gameID)  
+
+            while (game_state != GAME_STATE_END) and (game_state != GAME_STATE_MAIN_MENU): 
+                # counter to traverse game_played list 
+                counter = 0 
+                # refresh screen 
+                drawGameState(screen, state, IMAGES, SQ_SIZE, validMoves, sqSelected, playerOne, moveLogFont, True)
+                reviewing_buttons = ReviewGamesMenu.draw_reviewing_buttons(screen) 
+                game_state = ReviewGamesMenu.handle_click_reviewing(reviewing_buttons) 
+                # If game_state is a string which means go back and go forward buttons are pressed, we need to cast to Int
+                temp = int(game_state) 
+                # User can only make move if the counter is less than the max amount of moves (or else index problem)
+                if temp == 1 and counter < len(game_played) - 1: 
+                    state.makeMove(screen, game_played[counter])
+                    counter += 1 
+                # User can only go back a move (undo move) if counter is more than 0 or else counter would be -1 
+                if temp == -1 and counter > 0: 
+                    state.undoMove()
+                    counter -= 1 
+
+            # Reset all attributes 
+            state, validMoves, sqSelected, playerClicks, moveMade, gameOver, humanTurn, time_end = play_again(ChessEngine, state)
         
         if check_end_of_game(time_end, gameOver, state) and game_state == GAME_STATE_PLAYING: 
 
