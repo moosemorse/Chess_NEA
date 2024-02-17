@@ -29,15 +29,14 @@ def draw_buttons(screen, width, game_record, button_list, spacing_y, font):
     text_rect = text_surface.get_rect(center = button_rect.center)
     screen.blit(text_surface, text_rect)
 
-def draw_return_button(screen, button_list, spacing_y, font): 
+def draw_return_button(screen, button_list, font): 
     
     # Dimensions 
     spacing_x = 50 
     button_width = 100
     button_height = 100 
-    spacing_y = spacing_y // 2 
     x = spacing_x - (button_width // 2) 
-    y = spacing_y + (button_height // 2) 
+    y = 850
 
     # Purpose and text displayed on button 
     text = "Go back"
@@ -66,7 +65,7 @@ def draw_review_games_menu(screen, width, games):
     # List that stores button objects
     buttons = []
 
-    draw_return_button(screen, buttons, spacing_y, font) 
+    draw_return_button(screen, buttons, font) 
 
     for game in games:  
 
@@ -99,3 +98,33 @@ def handle_click(buttons):
                                  # If the button pressed is not "Go back" 
                                  # It has to be a game, so text is the GameID which we return 
                                  return text  
+                             
+def draw_move_buttons(screen, button_list, font): 
+
+    # Static dimensions 
+    button_width = 100
+    button_height = 100
+    y = 850  
+
+    # Calculate positions for buttons - center horizontally 
+    spacing_x = 800 // 3   
+
+    # Draw 2 buttons 
+    for i in range(0,2):    
+        x = spacing_x * (i + 1) - button_width // 2
+
+        # Purpose and text displayed on button 
+        if i == 0: 
+            text = "Move back" 
+        else: 
+            text = "Move forward"
+
+        button_rect = pygame.Rect(x, y, button_width, button_height) 
+        button_list.append((button_rect, text)) 
+
+        # Text drawn onto rectangle 
+        text_surface = font.render(text, True, (255, 255, 255)) 
+
+        # Center text 
+        text_rect = text_surface.get_rect(center = button_rect.center)
+        screen.blit(text_surface, text_rect)

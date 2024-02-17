@@ -9,6 +9,7 @@ import MainMenu
 import UserManagement 
 from datetime import datetime 
 import pickle 
+import ReviewGamesMenu
 
 # Initalise pygame 
 pygame.init() 
@@ -59,7 +60,10 @@ def main():
     GAME_STATE_CONDITIONS_MENU = 1
     GAME_STATE_PLAYING = 2
     GAME_STATE_SAVE_GAME = 3 
-    GAME_STATE_REVIEW_GAME = 4 
+    # For the menu which displays all the games
+    GAME_STATE_REVIEW_GAME_MENU = 4 
+    # For actually watching the game back 
+    GAME_STATE_REVIEWING_GAME = 5 
 
     # None - user is a guest 
     username = None 
@@ -225,6 +229,8 @@ def main():
             moveMade = False 
 
         if game_state == GAME_STATE_PLAYING:
+            # Reset game_saved variable so user can save game when playing again 
+            game_saved = False
             # Draw the current board 
             drawGameState(screen, state, IMAGES, SQ_SIZE, validMoves, sqSelected, playerOne, moveLogFont) 
             if timer is not None: 
@@ -232,7 +238,26 @@ def main():
                 timer.draw(screen, timer_font, 610, 810)  
                 time_left = timer.get_total_time() 
 
-        if check_end_of_game(time_end, gameOver, state): 
+        if game_state == GAME_STATE_REVIEW_GAME_MENU: 
+
+            games = manager.get_all_games()
+            game_buttons = ReviewGamesMenu.draw_review_games_menu(screen, WIDTH, games)
+            game_state = ReviewGamesMenu.handle_click(game_buttons)
+            # If the value of game_state is not below, it stores the value of gameID
+            if (game_state != -1) and (game_state != 0): 
+                gameID = game_state
+                game_state = GAME_STATE_REVIEWING_GAME
+
+        if game_state == GAME_STATE_REVIEWING_GAME: 
+            # Get clean board
+            state = ChessEngine.GameState()
+            game_played = manager.get_game(gameID)
+ 
+            drawGameState(screen, state, IMAGES, SQ_SIZE, validMoves, sqSelected, playerOne, moveLogFont)
+            
+
+        
+        if check_end_of_game(time_end, gameOver, state) and game_state == GAME_STATE_PLAYING: 
 
             gameOver = True 
 
@@ -265,7 +290,8 @@ def main():
             if timer is not None: 
                 timer.reset_timer() 
         
-        if game_state == GAME_STATE_END: 
+        if game_state == GAME_STATE_END:
+            manager.close_connection()  
             run = False 
             
 
