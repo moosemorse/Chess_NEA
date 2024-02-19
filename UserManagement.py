@@ -97,7 +97,7 @@ class UserManager:
         # Execute the SQL statement
         try:
             self.cursor.execute(insert_game_sql, (history['username'], history['date'], history['time'], history['pgn'], 
-                                                  history['outcome'], history['reason']))
+                                                  history['outcome'], history['result']))
             self.conn.commit()
             return True
         # Prevent program crashing 
@@ -105,23 +105,26 @@ class UserManager:
             print(e)
             return False
         
-    def get_game(self, gameID):
+    def get_game(self, gameID, username):
 
         # Retrieve the serialised moves from the database
-        self.cursor.execute('SELECT moves FROM games WHERE GameID=?', (gameID,))
+        self.cursor.execute('SELECT GamePlayed FROM games WHERE GameID=? AND UserName=?', (gameID, username))
         row = self.cursor.fetchone()
-        # Data stored in tuple, so access it as a tuple 
-        serialised_moves = row[0]
+        if row != None: 
+            # Data stored in tuple, so access it as a tuple 
+            serialised_moves = row[0]
 
-        # Deserialise the moves
-        moves = pickle.loads(serialised_moves) 
+            # Deserialise the moves
+            moves = pickle.loads(serialised_moves) 
 
-        return moves 
+            return moves 
+        else: 
+            return None 
     
-    def get_all_games(self): 
+    def get_all_games(self, username): 
         
         # Grab all records from Games table
-        self.cursor.execute('SELECT * FROM Games')
+        self.cursor.execute('SELECT * FROM Games WHERE UserName=?', (username,))
         all_rows = self.cursor.fetchall()
         
         return all_rows 

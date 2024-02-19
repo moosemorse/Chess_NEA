@@ -32,14 +32,14 @@ def draw_buttons(screen, width, game_record, button_list, spacing_y, font):
 def draw_return_button(screen, button_list, font): 
     
     # Dimensions 
-    spacing_x = 50 
+    spacing_x = 75
     button_width = 100
     button_height = 100 
     x = spacing_x - (button_width // 2) 
-    y = 850
+    y = 800
 
     # Purpose and text displayed on button 
-    text = "Go back"
+    text = "Main menu"
 
     button_rect = pygame.Rect(x, y, button_width, button_height) 
     button_list.append((button_rect, text)) 
@@ -81,30 +81,31 @@ def draw_review_games_menu(screen, width, games):
 
 def handle_click(buttons):
 
-    # Get all events from the event queue
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            # Handle the quit event to allow the program to exit
-            return -1 
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            # Check if a button (game) has been clicked
-                for button in buttons:
-                    for button_rect, text in button:
+    while True: 
+        # Get all events from the event queue
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                # Handle the quit event to allow the program to exit
+                return -1 
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                # Check if a button (game) has been clicked
+                    for button in buttons: 
+                        button_rect, text = button
                         if button_rect.collidepoint(event.pos):
-                             if text == "Go back":
-                                 # Return back to main menu so value of GAME_STATE_MAIN_MENU
-                                 return 0 
-                             else: 
-                                 # If the button pressed is not "Go back" 
-                                 # It has to be a game, so text is the GameID which we return 
-                                 return text  
+                            if text == "Main menu":
+                                # Return back to main menu so value of GAME_STATE_MAIN_MENU
+                                return 0 
+                            else: 
+                                # If the button pressed is not "Go back" 
+                                # It has to be a game, so text is the GameID which we return 
+                                return text  
                              
 def draw_move_buttons(screen, button_list, font): 
 
     # Static dimensions 
     button_width = 100
     button_height = 100
-    y = 850  
+    y = 800  
 
     # Calculate positions for buttons - center horizontally 
     spacing_x = 800 // 3   
@@ -146,23 +147,24 @@ def draw_reviewing_buttons(screen):
 
 def handle_click_reviewing(buttons): 
     
-    # Get all events from the event queue
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            # Handle the quit event to allow the program to exit
-            return -1 
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            # Check if a button (game) has been clicked
-                for button in buttons:
-                    for button_rect, text in button:
+    while True: 
+        # Get all events from the event queue
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                # Handle the quit event to allow the program to exit
+                return -1 
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                # Check if a button (game) has been clicked
+                    for button in buttons:
+                        button_rect, text = button 
                         if button_rect.collidepoint(event.pos):
-                             if text == "Go back":
-                                 # Return back to main menu so value of GAME_STATE_MAIN_MENU
-                                 return 0 
-                             elif text == "Move forward": 
-                                 return '1'
-                             else:
-                                 return '-1'
+                            if text == "Main menu":
+                                # Return back to main menu so value of GAME_STATE_MAIN_MENU
+                                return 0 
+                            elif text == "Move forward": 
+                                return '1'
+                            else:
+                                return '-1'
                              
 if __name__ == '__main__': 
 

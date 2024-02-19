@@ -27,7 +27,26 @@ def draw_buttons(screen, object_text, object_list, width):
         # Draw the text over the button
         screen.blit(text_surface, text_rect.topleft)
 
-def drawMainMenu(screen, width, height): 
+def draw_sign_out_button(screen, text): 
+
+    font = pygame.font.Font(None, 32) 
+
+    # Dimensions 
+    button_width = 50
+    button_height = 30
+
+    button_rect = pygame.Rect(30, 150, button_width, button_height) 
+    
+    # Text drawn onto rectangle 
+    text_surface = font.render(text, True, (255, 255, 255)) 
+
+    # Center text 
+    text_rect = text_surface.get_rect(topleft = button_rect.topleft)
+    screen.blit(text_surface, text_rect) 
+
+    return (button_rect, text)
+
+def drawMainMenu(screen, width, height, username): 
     # Create the main menu window 
     main_menu_surface = pygame.Surface((width, height))
     # Grey color for the window background
@@ -44,6 +63,15 @@ def drawMainMenu(screen, width, height):
     # Draw buttons 
     draw_buttons(screen, main_text, main_buttons, width) 
 
+    if username == None: 
+        draw_text(screen, 'Guest')
+        sign_out = draw_sign_out_button(screen, 'Log in')
+    else: 
+        draw_text(screen, username)
+        sign_out = draw_sign_out_button(screen, 'Sign out')
+
+    main_buttons.append(sign_out)
+
     pygame.display.update() 
 
     return main_buttons 
@@ -59,8 +87,32 @@ def handle_click(main_buttons):
                 return -1
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 # Check if the play button is clicked
-                # Play game has the only functionality at this point! 
                 if main_buttons[0][0].collidepoint(event.pos):
                     run = False 
                     return 1
+                # Check if review button is clicked
+                if main_buttons[1][0].collidepoint(event.pos): 
+                    run = False 
+                    return 4
+                if main_buttons[3][0].collidepoint(event.pos): 
+                    run = False 
+                    return 6
+                
+
+def draw_text(screen, text): 
+    # Draw the button rectangle
+    button_rect = pygame.Rect(30, 30, 100, 100)
+    pygame.draw.rect(screen, (15,15,15), button_rect)
+    
+    # Create font object
+    font = pygame.font.Font(None, 36) 
+    
+    # Render the text
+    text_surface = font.render(text, True, (255,255,255))
+    
+    # Calculate the position for the text
+    text_rect = text_surface.get_rect(center=button_rect.center)
+    
+    # Draw the text over the button
+    screen.blit(text_surface, text_rect.topleft)
 

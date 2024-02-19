@@ -10,6 +10,7 @@ import UserManagement
 from datetime import datetime 
 import pickle 
 import ReviewGamesMenu
+import SignInMenu
 
 # Initalise pygame 
 pygame.init() 
@@ -60,16 +61,16 @@ def main():
     GAME_STATE_CONDITIONS_MENU = 1
     GAME_STATE_PLAYING = 2
     GAME_STATE_SAVE_GAME = 3 
-    # For the menu which displays all the games
     GAME_STATE_REVIEW_GAME_MENU = 4 
-    # For actually watching the game back 
     GAME_STATE_REVIEWING_GAME = 5 
+    GAME_STATE_LOGIN = 6 
+    GAME_STATE_SIGNUP = 7 
 
     # None - user is a guest 
     username = None 
 
     # Set the initial game state
-    game_state = GAME_STATE_MAIN_MENU
+    game_state = GAME_STATE_LOGIN
 
     # Move Log Font field  
     moveLogFont = pygame.font.SysFont('Arial', 15, True, False) 
@@ -112,6 +113,9 @@ def main():
 
     # Flag for end of time reached
     time_end = False
+
+    # Error var tracks invalid login 
+    error = False 
 
     while run: 
         # Check if it's human's turn by matching booleans 
@@ -170,11 +174,55 @@ def main():
                             state.undoMove() 
                             moveMade = True  
 
+        if game_state == GAME_STATE_LOGIN: 
+            username, password = SignInMenu.draw_login_menu(screen, error)
+            # Check validity of login 
+            valid_login = manager.login(username, password) 
+            if valid_login: 
+                game_state = GAME_STATE_MAIN_MENU
+                error = False 
+            else: 
+                error = True 
+            # User clicked create account option
+            if username == -1: 
+                game_state = GAME_STATE_SIGNUP
+                error = False 
+            # User signed in as guest 
+            if username == None: 
+                game_state = GAME_STATE_MAIN_MENU
+                error = False 
+
+        if game_state == GAME_STATE_SIGNUP: 
+            username, password = SignInMenu.draw_create_account_menu(screen, error) 
+            # Check that user pressed create account 
+            if (username != None) and (username != -1): 
+                # Length validation on username and password 
+                if len(username) > 2 and len(password) > 2:             
+                    valid_signup = manager.create_user(username, password) 
+                    if valid_signup: 
+                        game_state = GAME_STATE_MAIN_MENU
+                        error = False
+                    else: 
+                        error = True 
+                else: 
+                    error = True 
+            # User pressed login 
+            if username == -1: 
+                game_state = GAME_STATE_LOGIN
+                error = False
+            # User playin as guest 
+            if username == None: 
+                game_state = GAME_STATE_MAIN_MENU
+                error = False 
+
+
         if game_state == GAME_STATE_MAIN_MENU: 
             # Draw and return main menu buttons 
-            main_menu_buttons = MainMenu.drawMainMenu(screen, WIDTH, HEIGHT)
+            main_menu_buttons = MainMenu.drawMainMenu(screen, WIDTH, HEIGHT, username)
             # Handle user clicking which button 
             game_state = MainMenu.handle_click(main_menu_buttons) 
+            while (game_state == GAME_STATE_REVIEW_GAME_MENU) and (username == None): 
+                game_state = MainMenu.handle_click(main_menu_buttons) 
 
 
         if game_state == GAME_STATE_CONDITIONS_MENU:
@@ -238,9 +286,9 @@ def main():
                 timer.draw(screen, timer_font, 610, 810)  
                 time_left = timer.get_total_time() 
 
-        if game_state == GAME_STATE_REVIEW_GAME_MENU and username != None: 
+        if game_state == GAME_STATE_REVIEW_GAME_MENU: 
 
-            games = manager.get_all_games()
+            games = manager.get_all_games(username)
             game_buttons = ReviewGamesMenu.draw_review_games_menu(screen, WIDTH, games)
             game_state = ReviewGamesMenu.handle_click(game_buttons)
             # If the value of game_state is not below, it stores the value of gameID
@@ -253,25 +301,29 @@ def main():
             state = ChessEngine.GameState()
 
             # Get the list of move objects 
-            game_played = manager.get_game(gameID)  
+            game_played = manager.get_game(gameID, username)  
 
+            # counter to traverse game_played list 
+            counter = 0 
+
+            reviewing_buttons = ReviewGamesMenu.draw_reviewing_buttons(screen) 
+            
             while (game_state != GAME_STATE_END) and (game_state != GAME_STATE_MAIN_MENU): 
-                # counter to traverse game_played list 
-                counter = 0 
-                # refresh screen 
+
                 drawGameState(screen, state, IMAGES, SQ_SIZE, validMoves, sqSelected, playerOne, moveLogFont, True)
-                reviewing_buttons = ReviewGamesMenu.draw_reviewing_buttons(screen) 
+                # refresh screen 
+                pygame.display.update()
                 game_state = ReviewGamesMenu.handle_click_reviewing(reviewing_buttons) 
                 # If game_state is a string which means go back and go forward buttons are pressed, we need to cast to Int
                 temp = int(game_state) 
                 # User can only make move if the counter is less than the max amount of moves (or else index problem)
-                if temp == 1 and counter < len(game_played) - 1: 
+                if (temp == 1) and (counter < len(game_played)): 
                     state.makeMove(screen, game_played[counter])
-                    counter += 1 
+                    counter = counter + 1
                 # User can only go back a move (undo move) if counter is more than 0 or else counter would be -1 
                 if temp == -1 and counter > 0: 
                     state.undoMove()
-                    counter -= 1 
+                    counter = counter - 1 
 
             # Reset all attributes 
             state, validMoves, sqSelected, playerClicks, moveMade, gameOver, humanTurn, time_end = play_again(ChessEngine, state)
@@ -316,16 +368,6 @@ def main():
 
         clock.tick(FPS) 
         pygame.display.flip() 
-
-def drawText(screen, text): 
-    # Font of text 
-    font = pygame.font.SysFont('Monospace', 26, True, False) 
-    # Render object 
-    textObject = font.render(text, 0, pygame.Color('Blue'))
-    # Center object 
-    textLocation = pygame.Rect(0,0, WIDTH, HEIGHT).move(WIDTH/2 - textObject.get_width()/2, HEIGHT/2 - textObject.get_height()/2)
-    # Draw object 
-    screen.blit(textObject, textLocation) 
 
 def get_date_and_time(): 
     

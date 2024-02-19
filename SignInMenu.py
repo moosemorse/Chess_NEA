@@ -2,7 +2,7 @@ import pygame
 
 pygame.init() 
 
-def draw_button(text, x, y): 
+def draw_button(screen, text, x, y): 
 
     font = pygame.font.Font(None, 32) 
 
@@ -34,7 +34,7 @@ def draw_heading(screen, text, x, y):
     screen.blit(text_surface, text_rect) 
 
 
-def draw_login_menu(screen): 
+def draw_login_menu(screen, error = False): 
     
     clock = pygame.time.Clock() 
 
@@ -47,9 +47,9 @@ def draw_login_menu(screen):
     # Initalise all rectangles for each input form 
     username_rect = pygame.Rect(200,300,300,32) 
     password_rect = pygame.Rect(200,400,300,32)
-    confirm_rect = draw_button('Confirm details', 200, 500) 
-    sign_up_rect = draw_button('Create an account', 200, 550)
-    guest_rect = draw_button('Continue as guest', 200, 600)
+    confirm_rect = draw_button(screen, 'Confirm details', 200, 500) 
+    sign_up_rect = draw_button(screen, 'Create an account', 200, 550)
+    guest_rect = draw_button(screen, 'Continue as guest', 200, 600)
 
     # Highlight colours 
     color_active = pygame.Color('White') 
@@ -91,7 +91,7 @@ def draw_login_menu(screen):
                     return username_text, password_text 
                 
                 if sign_up_rect.collidepoint(event.pos): 
-                    return '', '' 
+                    return -1, -1  
                 
                 if guest_rect.collidepoint(event.pos): 
                     return None, None 
@@ -135,6 +135,10 @@ def draw_login_menu(screen):
         draw_heading(screen, 'Enter username: ', 200, 260)
         draw_heading(screen, 'Enter password: ', 200, 360)
 
+        # Code for error message 
+        if error: 
+            draw_heading(screen, 'Invalid: try again!', 400, 200)
+
         # Draw rectangles with colour on border of rectangle
         pygame.draw.rect(screen, username_color, username_rect, 2) 
         pygame.draw.rect(screen, password_color, password_rect, 2)
@@ -142,17 +146,17 @@ def draw_login_menu(screen):
         # Confirm login details button 
         pygame.draw.rect(screen, standard_color, confirm_rect)
         # Have to recall function so that text is drawn over confirm colour 
-        confirm_rect = draw_button('Confirm details', 200, 500)
+        confirm_rect = draw_button(screen, 'Confirm details', 200, 500)
 
         # Create account button  
         pygame.draw.rect(screen, standard_color, sign_up_rect)
         # Have to recall function so that text is drawn over confirm colour 
-        sign_up_rect = draw_button('Create an account', 200, 550)
+        sign_up_rect = draw_button(screen, 'Create an account', 200, 550)
 
         # Continue as guest button 
         pygame.draw.rect(screen, standard_color, guest_rect)
         # Have to recall function so that text is drawn over confirm colour 
-        guest_rect = draw_button('Continue as guest', 200, 600)
+        guest_rect = draw_button(screen, 'Continue as guest', 200, 600)
 
         # Render text for username and password 
         username_text_surface = base_font.render(username_text, True, (255,255,255)) 
@@ -169,7 +173,7 @@ def draw_login_menu(screen):
         pygame.display.flip() 
         clock.tick(60)
 
-def draw_create_account_menu(screen): 
+def draw_create_account_menu(screen, error): 
     
     clock = pygame.time.Clock() 
 
@@ -182,9 +186,9 @@ def draw_create_account_menu(screen):
     # Initalise all rectangles for each input form 
     username_rect = pygame.Rect(200,300,300,32) 
     password_rect = pygame.Rect(200,400,300,32)
-    sign_up_rect = draw_button('Create account', 200, 500)
-    login_rect = draw_button('Log into existing', 200, 550) 
-    guest_rect = draw_button('Continue as guest', 200, 600)
+    sign_up_rect = draw_button(screen, 'Create account', 200, 500)
+    login_rect = draw_button(screen, 'Log into existing', 200, 550) 
+    guest_rect = draw_button(screen, 'Continue as guest', 200, 600)
 
     # Highlight colours 
     color_active = pygame.Color('White') 
@@ -223,7 +227,7 @@ def draw_create_account_menu(screen):
                     password_active = False 
                 
                 if login_rect.collidepoint(event.pos): 
-                    return '', ''
+                    return -1, -1
                 
                 if sign_up_rect.collidepoint(event.pos): 
                     return username_text, password_text 
@@ -270,6 +274,10 @@ def draw_create_account_menu(screen):
         draw_heading(screen, 'Enter username: ', 200, 260)
         draw_heading(screen, 'Enter password: ', 200, 360)
 
+        # Code for error message 
+        if error: 
+            draw_heading(screen, 'Invalid: try again!', 400, 200)
+
         # Draw rectangles with colour on border of rectangle
         pygame.draw.rect(screen, username_color, username_rect, 2) 
         pygame.draw.rect(screen, password_color, password_rect, 2)
@@ -277,17 +285,17 @@ def draw_create_account_menu(screen):
         # Confirm login details button 
         pygame.draw.rect(screen, standard_color, login_rect)
         # Have to recall function so that text is drawn over confirm colour 
-        login_rect = draw_button('Log into existing', 200, 550)
+        login_rect = draw_button(screen, 'Log into existing', 200, 550)
 
         # Create account button  
         pygame.draw.rect(screen, standard_color, sign_up_rect)
         # Have to recall function so that text is drawn over confirm colour 
-        sign_up_rect = draw_button('Create account', 200, 500)
+        sign_up_rect = draw_button(screen, 'Create account', 200, 500)
 
         # Continue as guest button 
         pygame.draw.rect(screen, standard_color, guest_rect)
         # Have to recall function so that text is drawn over confirm colour 
-        guest_rect = draw_button('Continue as guest', 200, 600)
+        guest_rect = draw_button(screen, 'Continue as guest', 200, 600)
 
         # Render text for username and password 
         username_text_surface = base_font.render(username_text, True, (255,255,255)) 
