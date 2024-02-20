@@ -174,16 +174,17 @@ def handle_click(screen, width, side_buttons, time_buttons, diff_buttons, confir
                                     sides = ["White", "Black"]
                                     # Store randomly selected side in options 
                                     options[key] = random.choice(sides) 
-                                if text == "Unlimited": 
-                                    options[key] = -1 
     
     # Cast values for compatability with later use 
     if options['side'] == "White": 
         options['side'] = True 
     else: 
-        options['side'] = False 
-    options['time'] = int(options['time']) * 60   
-    options['diff'] = int(options['diff']) - 1                         
+        options['side'] = False   
+    options['diff'] = int(options['diff']) - 1  
+    if options['time'] == "Unlimited": 
+        options['time'] = -1 * 60    
+    else: 
+        options['time'] = int(options['time']) * 60 
                                         
     # Return the selected options                                
     return options 
