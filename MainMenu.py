@@ -94,6 +94,9 @@ def handle_click(main_buttons):
                 if main_buttons[1][0].collidepoint(event.pos): 
                     run = False 
                     return 4
+                if main_buttons[2][0].collidepoint(event.pos): 
+                    run = False
+                    return 8 
                 if main_buttons[3][0].collidepoint(event.pos): 
                     run = False 
                     return 6

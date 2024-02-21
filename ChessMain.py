@@ -11,6 +11,7 @@ from datetime import datetime
 import pickle 
 import ReviewGamesMenu
 import SignInMenu
+import ReadRules 
 
 # Initalise pygame 
 pygame.init() 
@@ -65,6 +66,7 @@ def main():
     GAME_STATE_REVIEWING_GAME = 5 
     GAME_STATE_LOGIN = 6 
     GAME_STATE_SIGNUP = 7 
+    GAME_STATE_READ_RULES = 8 
 
     # None - user is a guest 
     username = None 
@@ -223,6 +225,11 @@ def main():
             game_state = MainMenu.handle_click(main_menu_buttons) 
             while (game_state == GAME_STATE_REVIEW_GAME_MENU) and (username == None): 
                 game_state = MainMenu.handle_click(main_menu_buttons) 
+
+
+        if game_state == GAME_STATE_READ_RULES: 
+            return_button = ReadRules.display_rules_window(screen) 
+            game_state = ReadRules.handle_click(return_button) 
 
 
         if game_state == GAME_STATE_CONDITIONS_MENU:
