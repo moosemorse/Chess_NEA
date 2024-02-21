@@ -4,6 +4,23 @@ import pygame.freetype  # Import the freetype module.
 
 pygame.init()
 
+# Store images for read rules section 
+IMAGES = {} 
+
+def load_images(): 
+    keys = ['chess-basic-movements'] 
+    for key in keys: 
+        IMAGES[key] = pygame.image.load(f"assets/read_rules_img/{key}.png")
+        IMAGES[key] = pygame.transform.scale(IMAGES[key], (500,400))
+    return keys 
+
+def draw_images(screen): 
+    images = load_images() 
+    spacing_y = 10 
+    for image in images: 
+        screen.blit(IMAGES[image], pygame.Rect(550, spacing_y, 200, 200))
+        spacing_y = spacing_y + 100
+
 def draw_text(text): 
     game_font = pygame.freetype.SysFont("monospace", 16) 
     text_surface, rect = game_font.render(text, (255,255,255))
@@ -49,13 +66,22 @@ def display_rules_window(screen):
     spacing_y = 75
 
     # Text drawn on each line 
-    text_list = ['Hello', 'World']
+    text_list = ["Under the first image, labelled 'chess movements',", 
+                 "each image represents how every piece can move.", 
+                 "Don't worry! You can see where pieces move during",
+                 "the game through highlighting.", 
+                 "Each image has their own label with their own", 
+                 "corresponding moves such as the king in the first",
+                 "image.",]
+
 
     # Drawing the text on the screen 
     for text in text_list: 
         spacing_y = spacing_y + 20 
         text_surface = draw_text(text)
         screen.blit(text_surface, (20, spacing_y))
+    
+    draw_images(screen) 
 
     pygame.display.update()
 
