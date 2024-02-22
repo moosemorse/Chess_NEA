@@ -294,14 +294,16 @@ def main():
                 time_left = timer.get_total_time() 
 
         if game_state == GAME_STATE_REVIEW_GAME_MENU: 
-
             games = manager.get_all_games(username)
-            game_buttons = ReviewGamesMenu.draw_review_games_menu(screen, WIDTH, games)
-            game_state = ReviewGamesMenu.handle_click(game_buttons)
-            # If the value of game_state is not below, it stores the value of gameID
-            if (game_state != GAME_STATE_END) and (game_state != GAME_STATE_MAIN_MENU): 
-                gameID = game_state
-                game_state = GAME_STATE_REVIEWING_GAME
+            if len(games) == 0: 
+                game_state = GAME_STATE_MAIN_MENU
+            else: 
+                game_buttons = ReviewGamesMenu.draw_review_games_menu(screen, WIDTH, games)
+                game_state = ReviewGamesMenu.handle_click(game_buttons)
+                # If the value of game_state is not below, it stores the value of gameID
+                if (game_state != GAME_STATE_END) and (game_state != GAME_STATE_MAIN_MENU): 
+                    gameID = game_state
+                    game_state = GAME_STATE_REVIEWING_GAME
 
         if game_state == GAME_STATE_REVIEWING_GAME: 
             # Get clean board
