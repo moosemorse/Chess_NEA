@@ -36,7 +36,7 @@ def draw_return_button(screen, button_list, font):
     button_width = 100
     button_height = 100 
     x = spacing_x - (button_width // 2) 
-    y = 800
+    y = 0
 
     # Purpose and text displayed on button 
     text = "Main menu"

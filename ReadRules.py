@@ -11,7 +11,7 @@ def load_images():
     keys = ['chess-basic-movements'] 
     for key in keys: 
         IMAGES[key] = pygame.image.load(f"assets/read_rules_img/{key}.png")
-        IMAGES[key] = pygame.transform.scale(IMAGES[key], (500,400))
+        IMAGES[key] = pygame.transform.scale(IMAGES[key], (450,400))
     return keys 
 
 def draw_images(screen): 
