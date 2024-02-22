@@ -16,10 +16,10 @@ def load_images():
 
 def draw_images(screen): 
     images = load_images() 
-    spacing_y = 10 
+    spacing_y = 20 
     for image in images: 
         screen.blit(IMAGES[image], pygame.Rect(550, spacing_y, 200, 200))
-        spacing_y = spacing_y + 100
+        spacing_y = spacing_y + 400
 
 def draw_text(text): 
     game_font = pygame.freetype.SysFont("monospace", 16) 
@@ -72,7 +72,30 @@ def display_rules_window(screen):
                  "the game through highlighting.", 
                  "Each image has their own label with their own", 
                  "corresponding moves such as the king in the first",
-                 "image.",]
+                 "image.",
+                 "", 
+                 "", 
+                 "You will also find the conditions menu when you ", 
+                 "press play on the main menu where you can select", 
+                 "what options you want to play with.", 
+                 "", 
+                 "So, for time conditions, each integer represents", 
+                 "the time in minutes you will be given for the game.", 
+                 "", 
+                 "Also, difficulty is ascending so ", 
+                 "level 1 is the easiest and level 3 is the hardest.",
+                 "", 
+                 "", 
+                 "Also, review games feature is exclusively for users",
+                 "who are logged in! You cannot access it when signed", 
+                 "in as guest.",
+                 " ", 
+                 " ", 
+                 "To save games, you just need to press save game at the end of the game you just played and it", 
+                 "then should appear in the review games menu when you click on the button.",
+                 " ", 
+                 " ", 
+                 "ENJOY!!"]
 
 
     # Drawing the text on the screen 
