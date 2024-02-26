@@ -29,14 +29,13 @@ def draw_buttons(screen, width, game_record, button_list, spacing_y, font):
     text_rect = text_surface.get_rect(center = button_rect.center)
     screen.blit(text_surface, text_rect)
 
-def draw_return_button(screen, button_list, font): 
+def draw_return_button(screen, button_list, font, y): 
     
     # Dimensions 
     spacing_x = 75
     button_width = 100
     button_height = 100 
-    x = spacing_x - (button_width // 2) 
-    y = 0
+    x = spacing_x - (button_width // 2)
 
     # Purpose and text displayed on button 
     text = "Main menu"
@@ -65,7 +64,7 @@ def draw_review_games_menu(screen, width, games):
     # List that stores button objects
     buttons = []
 
-    draw_return_button(screen, buttons, font) 
+    draw_return_button(screen, buttons, font, 0) 
 
     for game in games:  
 
@@ -141,7 +140,7 @@ def draw_reviewing_buttons(screen):
 
     draw_move_buttons(screen, buttons, font)
 
-    draw_return_button(screen, buttons, font) 
+    draw_return_button(screen, buttons, font, 800) 
 
     return buttons 
 
