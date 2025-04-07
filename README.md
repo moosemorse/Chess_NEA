@@ -1,6 +1,6 @@
 # Chess NEA Project
 
-This repository contains the source code for a chess application and chess AI developed as part of a school project (NEA).
+This repository contains the source code for a full-stack chess application and chess AI developed as part of a school project (NEA).
 
 ## Table of Contents
 
@@ -13,7 +13,7 @@ This repository contains the source code for a chess application and chess AI de
 
 ## Introduction
 
-This project is a chess application written in Python that includes a chess AI. The purpose of this project is to fulfill the requirements of the NEA (Non-Exam Assessment) for school.
+This project is a full-stack chess application written in Python that includes a chess AI. The purpose of this project is to fulfill the requirements of the NEA (Non-Exam Assessment) for school.
 
 ## Features
 
